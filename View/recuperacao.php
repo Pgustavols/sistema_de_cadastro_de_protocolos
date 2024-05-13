@@ -12,44 +12,23 @@
         .font-padrao {
             font-family: Roboto;
         }
-        .card-centralizado {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-        }
-        .titulo-centralizado {
-            text-align: center;
-        }
-        .negrito {
-            font-weight: bold;
-        }
-        .botao-cancelar {
-            background-color: white;
-            color: black;
-        }
     </style>
 </head>
-<body style="background-color: #F2F2F2;">
-<header class="container-fluid bg-dark shadow p-4">
-    <h1 class="font-padrao text-white titulo-centralizado">Recuperação de Senha</h1>
+<body style="background-color: #D9D9D9;">
+<header class="container-fluid bg-dark shadow p-4 text-center">
+    <h1 class="font-padrao text-white">Recuperação de Senha</h1>
 </header>
-<main class="container-fluid p-3">
-    <div class="card card-centralizado">
-        <div class="card-body">
-            <p><span class="negrito">O seu gestor irá receber a solicitação para alteração da senha.</span></p>
-            <form action="#" class="row g-3">
-                <div class="col-12">
-                    <label for="login" class="form-label"><span class="negrito">Login</span></label>
-                    <input type="text" class="form-control" id="login" name="login">
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-dark">Enviar Solicitação</button>
-                    <button type="button" class="btn btn-secondary botao-cancelar">Cancelar</button>
-                </div>
-            </form>
-        </div>
+<main class="container-fluid p-4 font-padrao">
+    <div class="container m-auto bg-white rounded shadow p-4 border" style="width:30%; min-width:350px;">
+        <p class="text-center fw-semibold my-4">O seu gestor irá receber a solicitação para alteração da senha.</p>
+        <form action="#">
+            <div class="form-floating my-3">
+                <input type="text" class="form-control" id="login" name="login" placeholder="Login">
+                <label for="login">Login</label>
+            </div>
+                <button class="btn btn-dark col-12 my-2">Enviar Solicitação</button>
+                <button class="btn btn-danger col-12 my-2">Cancelar</button>
+        </form>
     </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
