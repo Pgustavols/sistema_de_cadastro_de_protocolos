@@ -5,8 +5,8 @@
         private $nome;
         private $email;
         private $setor;
-        private $cargo;
         private $senha;
+        private $nivel;
 
         //Getters and setters
             //CPF
@@ -41,12 +41,12 @@
                 return $this->setor;
             }
 
-            //Cargo
-            public function setCargo($cargo){
-                $this->cargo = $cargo;
+            //Nivel
+            public function setNivel($nivel){
+                $this->nivel = $nivel;
             }
-            public function getCargo(){
-                return $this->cargo;
+            public function getNivel(){
+                return $this->nivel;
             }
 
             //Senha
