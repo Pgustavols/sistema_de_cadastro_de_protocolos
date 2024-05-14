@@ -36,9 +36,6 @@
                     <a href="recuperacao.php" class="text-dark">Esqueci minha senha</a>
                 </div>
                 <button type="submit" class="col-12 btn btn-dark my-2">Entrar</button>
-                <div class="col-12 text-center">
-                    <a href="#" class="text-dark">Solicitar cadastro</a>
-                </div>
             </form>
     </div>
 </main>
