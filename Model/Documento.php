@@ -1,22 +1,38 @@
 <?php 
 
     class Documento {    
-        private $nProtocolo;
+        private $protocolo;
+        private $autor;
+        private $destinatario;
         private $dataCadastro;
         private $tipo;
         private $titulo;
-        private $possuidor;
-        private $cpfResponsavel;
+        private $estado;
 
         //Getters and setters
             //Numero Protocolo
-            public function setNProtocolo($nProtocolo){
-                $this->nProtocolo = $nProtocolo;
+            public function setProtocolo($protocolo){
+                $this->protocolo = $protocolo;
             }
-            public function getNProtocolo(){
-                return $this->nProtocolo;
+            public function getProtocolo(){
+                return $this->protocolo;
             }
-
+            
+            //cpf autor
+            public function setAutor($autor){
+                $this->autor = $autor;
+            }
+            public function getAutor(){
+                return $this->autor;
+            }
+            
+            //CPF Destinatário
+            public function setDestinatario($destinatario){
+                $this->destinatario = $destinatario;
+            }
+            public function getDestinatatio(){
+                return $this->destinatario;
+            }
             //Data Cadastro
             public function setDataCadastro($dataCadastro){
                 $this->dataCadastro = $dataCadastro;
@@ -41,20 +57,13 @@
                 return $this->titulo;
             }
 
-            //Possuidor
-            public function setPossuidor($possuidor){
-                $this->possuidor = $possuidor;
+            // estado 
+            public function setEstado($estado){
+                $this->estado = $estado;
             }
-            public function getPossuidor(){
-                return $this->possuidor;
+            public function getEstado($estado){
+                return $this->$estado;
             }
 
-            //CPF Responsável
-            public function setCPFResponsavel($cpfResponsavel){
-                $this->cpfResponsavel = $cpfResponsavel;
-            }
-            public function getCPFResponsavel(){
-                return $this->cpfResponsavel;
-            }
     }
 ?>
