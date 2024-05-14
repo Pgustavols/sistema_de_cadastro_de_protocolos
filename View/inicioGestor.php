@@ -68,12 +68,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-dark table-hover rounded-3 shadow">
+                    <table class="table table-striped table-hover rounded-3 shadow">
                         <thead>
                             <th>Nº Protocolo</th>
                             <th>Título</th>
                             <th>Enviado por</th>
-                            <th>Data de Cadastro</th>
+                            <th>Data de Envio</th>
                             <th>Confirmar</th>
                             <th>Recusar</th>
                         </thead>
@@ -161,7 +161,7 @@
                     </svg>
                 </button>
                 <br>
-                    <table class="table table-dark table-hover rounded-3 shadow">
+                    <table class="table table-striped table-hover rounded-3 shadow">
                         <thead>
                             <th>Nome</th>
                             <th>Setor</th>
