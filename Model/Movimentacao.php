@@ -2,68 +2,59 @@
 
     class Movimentacao {    
         private $id;
-        private $dataEnvio;
-        private $dataRecebimento;
-        private $cpfRemetente;
-        private $cpfDestinatario;
-        private $status;
-        private $nProtocoloDocumento;
-
+        private $protocolo;
+        private $estado;
+        private $destinatario;
+        private $dataAcao;
+        private $remetente;
+        
         //Getters and setters
-            //ID
-            public function setId($id){
-                $this->id = $id;
-            }
-            public function getId(){
-                return $this->id;
-            }
+        //ID
+        public function setId($id){
+            $this->id = $id;
+        }
+        public function getId(){
+            return $this->id;
+        }
+        //Numero Protocolo Documento
+        public function setProtocolo($protocolo){
+            $this->protocolo = $protocolo;
+        }
+        public function getProtocolo(){
+            return $this->protocolo;
+        }
+        //estado
+        public function setEstado($estado){
+            $this->estado = $estado;
+        }
+        public function getEstado(){
+            return $this->estado;
+        }
 
-            //Data Envio
-            public function setDataEnvio($dataEnvio){
-                $this->dataEnvio = $dataEnvio;
-            }
-            public function getDataEnvio(){
-                return $this->dataEnvio;
-            }
+        //CPF Destinatario
+        public function setDestinatario($destinatario){
+            $this->destinatario = $destinatario;
+        }
+        public function getDestinatatio(){
+            return $this->destinatario;
+        }
+
+        //Data Ação
+        public function setDataAcao($dataAcao){
+            $this->dataAcao = $dataAcao;
+        }
+        public function getDataAcao(){
+            return $this->dataAcao;
+        }
             
-            //Data Recebimento
-            public function setDataRecebimento($dataRecebimento){
-                $this->dataRecebimento = $dataRecebimento;
-            }
-            public function getDataRecebimento(){
-                return $this->dataRecebimento;
-            }
-
-            //CPF Remetente
-            public function setCPFRemetente($cpfRemetente){
-                $this->cpfRemetente = $cpfRemetente;
-            }
-            public function getCPFRemetente(){
-                return $this->cpfRemetente;
-            }
-
-            //CPF Destinatario
-            public function setCPFDestinatario($cpfDestinatario){
-                $this->cpfDestinatario = $cpfDestinatario;
-            }
-            public function getCPFDestinatario(){
-                return $this->cpfDestinatario;
-            }
-
-            //Status
-            public function setStatus($status){
-                $this->status = $status;
-            }
-            public function getStatus(){
-                return $this->status;
-            }
-            
-            //Numero Protocolo Documento
-            public function setNProtocoloDocumento($nProtocoloDocumento){
-                $this->nProtocoloDocumento = $nProtocoloDocumento;
-            }
-            public function getMProtocoloDocumento(){
-                return $this->nProtocoloDocumento;
-            }
+    
+        //CPF Remetente
+        public function setRemetente($remetente){
+            $this->remetente = $remetente;
+        }
+        public function getRemetente(){
+            return $this->remetente;
+        }
+   
     }
 ?>
