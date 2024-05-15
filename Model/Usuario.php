@@ -77,7 +77,7 @@
             }
 
 
-            public function atualizarBD(){
+            public function atualizarCliente(){
             
                 require_once "ConexaoBD.php";
                 
