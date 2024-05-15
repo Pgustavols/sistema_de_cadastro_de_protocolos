@@ -99,32 +99,28 @@
             }
 
             public function carregarUsuario($cpf){
-                require_once 'ConexaoBD.php';
+                require_once "ConexaoBD.php";
     
                 $con = new ConexaoBD();
                 $conn = $con->conectar();
-                if ($conn->connect_error){
-                    die("Connection failed: ". $conn->connect_error);
+    
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
                 }
     
-                $stmt = $conn->prepare("SELECT * FROM usuario WHERE cpf = ?");
-                $stmt->bind_param("s", $cpf);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $r = $result->fetch_object();
-
+                $sql = "SELECT * FROM usuario WHERE cpf = ".$cpf;
+                $re = $conn->query($sql);
+                $r = $re->fetch_object();
                 if($r != null){
                     $this->cpf = $r->cpf;
                     $this->nome = $r->nome;
                     $this->email = $r->email;
                     $this->setor = $r->setor;
-                    $this->nivel = $r->nivel;
                     $this->senha = $r->senha;
-                    $stmt->close();
+                    $this->nivel = $r->nivel;
                     $conn->close();
                     return true;
-                } else {
-                    $stmt->close();
+                }else{
                     $conn->close();
                     return false;
                 }
