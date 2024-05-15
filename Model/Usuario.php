@@ -41,7 +41,7 @@
                 return $this->setor;
             }
 
-            //Cargo
+            //Nivel
             public function setNivel($nivel){
                 $this->nivel = $nivel;
             }
@@ -57,7 +57,7 @@
                 return $this->senha;
             }
 
-            public function inserirCliente(){
+            public function inserirUsuario(){
                 require_once 'ConexaoBD.php';
     
                 $con = new ConexaoBD();
@@ -76,8 +76,7 @@
                 }
             }
 
-
-            public function atualizarCliente(){
+            public function atualizarUsuario(){
             
                 require_once "ConexaoBD.php";
                 
@@ -87,7 +86,7 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE usuario SET nome = '".$this->nome."', email = '".$this->email."', setor ='".$this->setor."', senha = '".$this->senha."', '".$this->nivel."' WHERE cpf = '".$this->cpf.";";
+                $sql = "UPDATE usuario SET nome = '".$this->nome."', email = '".$this->email."', setor ='".$this->setor."', senha = '".$this->senha."', WHERE cpf = '".$this->cpf.";";
                 
     
                 if($conn->query($sql) === TRUE){
@@ -98,5 +97,38 @@
                     return FALSE;
                 }
             }
+
+            public function carregarUsuario($cpf){
+                require_once 'ConexaoBD.php';
+    
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if ($conn->connect_error){
+                    die("Connection failed: ". $conn->connect_error);
+                }
+    
+                $stmt = $conn->prepare("SELECT * FROM usuario WHERE cpf = ?");
+                $stmt->bind_param("s", $cpf);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $r = $result->fetch_object();
+
+                if($r != null){
+                    $this->cpf = $r->cpf;
+                    $this->nome = $r->nome;
+                    $this->email = $r->email;
+                    $this->setor = $r->setor;
+                    $this->nivel = $r->nivel;
+                    $this->senha = $r->senha;
+                    $stmt->close();
+                    $conn->close();
+                    return true;
+                } else {
+                    $stmt->close();
+                    $conn->close();
+                    return false;
+                }
+            }
+    
     }
 ?>

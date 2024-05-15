@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-10 my-3">
                             <label for="txtTitulo" class="form-label">Título</label>
-                            <input type="number" class="form-control" id="txtTitulo" name="txtTitulo">
+                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo">
                         </div>
                         <div class="col-3 my-3">
                             <label for="txtData" class="form-label">Data de cadastro</label>
@@ -164,7 +164,6 @@
             <thead>
                 <th>Nº Protocolo</th>
                 <th>Título</th>
-                <th>Possuidor</th>
                 <th>Data de cadastro</th>
                 <th>Status</th>
                 <th>Visualizar</th>

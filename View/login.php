@@ -23,28 +23,22 @@
 <main class="container-fluid p-4 font-padrao">
     <div class="container m-auto bg-white rounded shadow p-4 border" style="width:30%; min-width:350px;">
             <p class="text-center fw-semibold my-4">Insira o login fornecido pelo gestor</p>
-            <form action="processar_login.php" method="post">
+            <form action="../TCC/Controller/Navegacao.php" method="post">
                 <div class="form-floating col-12 my-3">
-                    <input type="text" id="login" name="login" class="form-control" placeholder="Login">
-                    <label for="login">Login</label>
+                    <input type="text" id="txtCPF" name="txtCPF" class="form-control" placeholder="CPF">
+                    <label for="txtCPF">CPF</label>
                 </div>
                 <div class="form-floating col-12 my-3">
-                    <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
-                    <label for="senha">Senha</label>
+                    <input type="password" class="form-control" id="txtSenha" name="txtSenha" placeholder="Senha">
+                    <label for="txtSenha">Senha</label>
                 </div>
                 <div class="col-12 my-2 text-end">
                     <a href="recuperacao.php" class="text-dark">Esqueci minha senha</a>
                 </div>
-                <button type="submit" class="col-12 btn btn-dark my-2">Entrar</button>
+                <button name="btnLogin" class="col-12 btn btn-dark my-2">Entrar</button>
             </form>
     </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-</script>
 </body>
 </html>
