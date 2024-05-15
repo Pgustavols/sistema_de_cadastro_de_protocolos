@@ -41,7 +41,7 @@
                 return $this->setor;
             }
 
-            //Nivel
+            //Cargo
             public function setNivel($nivel){
                 $this->nivel = $nivel;
             }
@@ -55,6 +55,48 @@
             }
             public function getSenha(){
                 return $this->senha;
+            }
+
+            public function inserirCliente(){
+                require_once 'ConexaoBD.php';
+    
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+                $sql = "INSERT INTO usuario (cpf, nome, email, setor, senha, nivel) VALUES ('".$this->cpf."','".$this->nome."','".$this->email."','".$this->setor."', '".$this->senha."', '".$this->nivel."');";
+    
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+
+
+            public function atualizarBD(){
+            
+                require_once "ConexaoBD.php";
+                
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "UPDATE usuario SET nome = '".$this->nome."', email = '".$this->email."', setor ='".$this->setor."', senha = '".$this->senha."', '".$this->nivel."' WHERE cpf = '".$this->cpf.";";
+                
+    
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
             }
     }
 ?>
