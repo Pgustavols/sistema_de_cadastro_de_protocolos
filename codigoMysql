@@ -1,0 +1,91 @@
+create database sistema_de_protocolo;
+use sistema_de_protocolo;
+
+create table usuario(
+	cpf varchar(11) primary key,
+	nome varchar(255) not null,
+  setor varchar(50) not null,
+  email varchar(255) unique not null,
+  senha varchar(50) not null,
+  nivel enum("Comum", "Gerente") not null
+);
+
+create table documento(
+	nProtocolo int unsigned primary key auto_increment,
+	cpf_possuidor varchar(11) not null,
+    cpf_destinatario varchar(11) not null,
+    data_de_cadastro date not null,
+	tipo enum("Requirimento", "Pedido de Compra", "Ata", "Relatório") not null,
+    titulo varchar(255) not null,
+    estado varchar(50) not null default "Pendente",
+    foreign key(cpf_possuidor) references usuario(cpf)
+);
+
+
+create table movimentacao(
+	id int primary key auto_increment,
+    nProtocolo int unsigned,
+	estado varchar(50) not null,
+    cpf_destinatario varchar(11) not null,
+    data_da_acao date,
+    cpf_remetente varchar(11) not null,
+    foreign key(nProtocolo) references documento(nProtocolo)
+);
+
+delimiter //
+
+CREATE TRIGGER movimento_cadastro AFTER INSERT ON documento
+FOR EACH ROW 
+BEGIN
+    INSERT INTO movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente) 
+    VALUES (NEW.nProtocolo, 'Cadastro', NEW.cpf_destinatario, NEW.data_de_cadastro, NEW.cpf_possuidor);
+    
+END ;
+
+// delimiter 
+
+delimiter //
+
+create trigger movimento_alterar after update on documento for each row
+begin
+	
+		if (new.cpf_possuidor = new.cpf_destinatario and new.estado <> "Não aceito") then
+			insert into movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente) 
+			values(new.nProtocolo, "Recebimento", new.cpf_possuidor, CURDATE(), old.cpf_possuidor);
+        end if; 
+        
+        if(old.cpf_destinatario <> new.cpf_destinatario and new.estado <> "Não aceito") then
+            insert into movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente) 
+			values(new.nProtocolo, "Envio", new.cpf_destinatario, CURDATE(), old.cpf_destinatario);
+        end if;
+			
+        if (new.titulo <> old.titulo) then
+            insert into movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente)
+            values(new.nProtocolo, "Alteração", "", CURDATE(), new.cpf_possuidor);
+		end if;
+        
+        if(new.estado = "Excluído") then
+			insert into movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente)
+            values(new.nProtocolo, "Exclusão", "", CURDATE(), new.cpf_possuidor);
+        end if;
+        
+        if(new.estado = "Não aceito") then
+			insert into movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente)
+            values(new.nProtocolo, "Recusado", new.cpf_possuidor, CURDATE(), old.cpf_destinatario);
+        end if;
+end ;
+   	
+ // delimiter ;
+
+ DELIMITER //
+
+create procedure inserirUsuario (in cpf varchar(11), in nome varchar(255), in setor varchar(50), 
+in email varchar(255), in senha varchar(50), in nivel enum("Comum", "Gerente"))
+
+begin
+	insert into usuario(cpf, nome, setor, email, senha, nivel) values(cpf, nome, setor, email, senha, nivel);
+end
+
+
+// DELIMITER ;
+
