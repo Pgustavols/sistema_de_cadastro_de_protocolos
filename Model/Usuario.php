@@ -65,7 +65,7 @@
                 if($conn->connect_error){
                     die("Connection failed: ".$conn->connect_error);
                 }
-                $sql = "INSERT INTO usuario (cpf, nome, email, setor, senha, nivel) VALUES ('".$this->cpf."','".$this->nome."','".$this->email."','".$this->setor."', '".$this->senha."', '".$this->nivel."');";
+                $sql = '"call inserirUsuario"'.'"'($this->cpf, $this->nome, $this->setor, $this->email, $this->senha, $this->nivel).';"';
     
                 if($conn->query($sql) === TRUE){
                     $conn->close();
