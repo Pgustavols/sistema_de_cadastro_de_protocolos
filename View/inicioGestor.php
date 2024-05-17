@@ -17,6 +17,15 @@
     </style>
 </head>
 <body style="background-color: #F2F2F2;">
+<?php
+    include_once '../Controller/DocumentoController.php';
+    include_once '../Controller/UsuarioController.php';
+    include_once '../Model/Usuario.php';
+    if(!isset($_SESSION))
+        {
+        session_start();
+        }
+?>
 <header class="container-fluid bg-dark shadow p-4">
     <h1 class="font-padrao text-white ">Olá, seja bem vindo(a)</h1>
 </header>
@@ -254,7 +263,33 @@
                 <th class="text-center">Visualizar</th>
                 <th class="text-center">Histórico</th>
             </thead>
-            <tbody>
+            <?php
+                $dCon = new DocumentoController();
+                $results = $dCon->telaInicialdocumento(unserialize($_SESSION['Usuario'])->getCpf_possuidor());
+                if($results != null)
+                while($row = $results->fetch_object()) {
+                echo '<tr>';
+                echo '<td>'.$row->nProtocolo.'</td>';
+                echo '<td>'.$row->titulo.'</td>';
+                echo '<td>'.$row->possuidor.'</td>';
+                echo '<td>'.$row->dataCadastro.'</td>';
+                echo '<td>'.$row->estado.'</td>';
+                echo '<td>
+                <form action="../Controller/Navegacao.php" method="post">
+                <input type="hidden" name="nProtocoloExc" value="'.$row->nProtocolo.'">
+                <button name="btnVisualizarDocGestor" class="w3-button w3-block w3-blue
+                w3-cell w3-round-large">
+                <i class="bi bi-eye"></i></button></td>';
+                echo '<td>
+                <form action="../Controller/Navegacao.php" method="post">
+                <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                <button name="btnHistoricoDocGestor" class="w3-button w3-block w3-blue
+                w3-cell w3-round-large">
+                <i class="bi bi-clock-history"></i></button></td>
+                </form>';
+                echo '</tr>';
+                }
+            ?>
         </table>
     </div>
 </main>
