@@ -265,14 +265,14 @@
             </thead>
             <?php
                 $dCon = new DocumentoController();
-                $results = $dCon->telaInicialdocumento(unserialize($_SESSION['Usuario'])->getCpf_possuidor());
+                $results = $dCon->telaInicialdocumento();
                 if($results != null)
                 while($row = $results->fetch_object()) {
                 echo '<tr>';
                 echo '<td>'.$row->nProtocolo.'</td>';
                 echo '<td>'.$row->titulo.'</td>';
-                echo '<td>'.$row->possuidor.'</td>';
-                echo '<td>'.$row->dataCadastro.'</td>';
+                echo '<td>'.$row->cpf_possuidor.'</td>';
+                echo '<td>'.$row->data_de_cadastro.'</td>';
                 echo '<td>'.$row->estado.'</td>';
                 echo '<td>
                 <form action="../Controller/Navegacao.php" method="post">
