@@ -1,0 +1,25 @@
+<?php
+    if(!isset($_SESSION))
+    {
+    session_start();
+    }
+
+    class DocumentoController{
+        public function aceitacaoDoDocumento($protocolo, $destinatario) {
+            require_once '../Model/Documento.php';
+            $documento = new Documento();
+            $documento->setnProtocolo($protocolo);
+            $documento->setCpf_possuidor($destinatario);
+            $r = $documento->receberDocumento();
+            $_SESSION['documento'] = serialize($documento);
+            return $r;
+        }
+
+        public function telaInicialdocumento(){
+            require_once '../Model/Documento.php';
+            $documento = new Documento();
+            $r = $documento->carregarDocumentosNaTelaInicialGestor();
+            return $r;
+        }
+    }
+?>
