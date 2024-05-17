@@ -21,5 +21,12 @@
             $r = $documento->carregarDocumentosNaTelaInicialGestor();
             return $r;
         }
+
+        public function telaInicialComum($cpf_possuidor){
+            require_once '../Model/Documento.php';
+            $documento = new Documento();
+            $resultado = $documento->carregarDocumentosNaTelaInicialComum($cpf_possuidor);
+            return $resultado;
+        }
     }
 ?>
