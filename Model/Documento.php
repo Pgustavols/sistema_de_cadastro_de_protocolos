@@ -76,11 +76,13 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "SELECT * FROM documento WHERE cpf_possuidor = ".$cpf_possuidor."'and estado <>'".'"Excluído"';
+                $sql = "SELECT * FROM documento WHERE cpf_possuidor = '$cpf_possuidor' AND estado <> 'Excluído'";
                 $re = $conn->query($sql);
                 $conn->close();
                 return $re;
             }
+
+            
 
 
 
@@ -95,6 +97,7 @@
                 }
     
                 $sql = "SELECT * FROM documento";
+                
                 $re = $conn->query($sql);
                 $conn->close();
                 return $re;
