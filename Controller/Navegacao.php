@@ -37,6 +37,40 @@
                         </script>";
                     }
                 }
-                break;
+            break;
+
+        //Cadastrar usuario
+        case isset($_POST["btnCadastrarUser"]):
+            require_once "../Controller/UsuarioController.php";
+            $uController = new UsuarioController();
+
+            if ($uController->inserir(
+                $_POST["txtCPF"],
+                $_POST["txtNome"],
+                $_POST["txtSetor"],
+                $_POST["txtEmail"],
+                $_POST["txtSenha"],
+                $_POST["txtNivel"],
+            )){
+                include_once "../View/inicioGestor.php";
+                echo "<script>
+                    alert('Cadastro realizado com sucesso');
+                        window.history.back();
+                  </script>";
+            } else {
+                include_once "../View/inicioGestor.php";
+                echo "<script>
+                    alert('Cadastro não realizado');
+                        window.history.back();
+                  </script>";
+            }
+            break;
+
+        // Botão cancelar
+        case isset($_POST["btnCancelar"]):
+            echo "<script>
+                window.history.back();
+                  </script>";
+            break;
     }
 ?>

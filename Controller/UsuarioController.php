@@ -5,15 +5,15 @@
     }
 
     class UsuarioController{
-        public function inserir($cpf, $nome, $email, $setor, $nivel,$senha) {
+        public function inserir($cpf, $nome, $setor, $email, $senha, $nivel) {
         require_once '../Model/Usuario.php';
         $usuario = new Usuario();
         $usuario->setCPF($cpf);
         $usuario->setNome($nome);
-        $usuario->setEmail($email);
         $usuario->setEmail($setor);
-        $usuario->setEmail($nivel);
+        $usuario->setEmail($email);
         $usuario->setSenha($senha);
+        $usuario->setEmail($nivel);
         $r = $usuario->inserirUsuario();
         $_SESSION['Usuario'] = serialize($usuario);
         return $r;

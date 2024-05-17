@@ -185,37 +185,36 @@
                         <p class="text-break">Insira as informações do funcionários</p>
                     </div>
                     <div class="col-6">
-                            <form action="" method="POST">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="txtNome" name="txtNome" placeholder="Nome">
-                                    <label for="txtNome">Nome</label>
-                                </div>
+                            <form action="../Controller/Navegacao.php" method="POST">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="txtCPF" name="txtCPF" placeholder="CPF">
                                     <label for="txtCPF">CPF</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="E-mail">
-                                    <label for="txtEmail">E-mail</label>
+                                    <input type="text" class="form-control" id="txtNome" name="txtNome" placeholder="Nome">
+                                    <label for="txtNome">Nome</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="txtSetor" name="txtSetor" placeholder="Setor">
                                     <label for="txtSetor">Setor</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="txtCargo" name="txtCargo" placeholder="Cargo">
-                                    <label for="txtCargo">Cargo</label>
+                                    <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="E-mail">
+                                    <label for="txtEmail">E-mail</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="password" class="form-control" id="txtSenha" name="txtSenha" placeholder="Senha">
                                     <label for="txtSenha">Senha</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="txtSenha" name="txtSenha" placeholder="Confirmar Senha">
+                                    <input type="password" class="form-control" id="txtConfirmSenha" name="txtConfimrSenha" placeholder="Confirmar Senha">
                                     <label for="txtSenha">Confirmar Senha</label>
                                 </div>
-                            <button class="btn btn-danger">Cancelar</button>
-                            <button class="btn btn-dark">Cadastrar</button>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="txtNivel" name="txtNivel" placeholder="Nível">
+                                    <label for="txtNivel">Nível</label>
+                                </div>
+                            <button name="btnCadastrarUser" class="btn btn-dark">Cadastrar</button>
                         </form>
                         </div>
                 </div>
