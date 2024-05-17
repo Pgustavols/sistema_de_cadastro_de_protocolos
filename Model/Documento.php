@@ -66,7 +66,7 @@
             }
 
 
-            public function carregarDocumentosNaTelaInicial($cpf_possuidor){
+            public function carregarDocumentosNaTelaInicialComum($cpf_possuidor){
                 require_once "ConexaoBD.php";
     
                 $con = new ConexaoBD();
@@ -76,24 +76,31 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "SELECT * FROM documento WHERE cpf_possuidor = ".$cpf_possuidor;
+                $sql = "SELECT * FROM documento WHERE cpf_possuidor = ".$cpf_possuidor."'and estado <>'".'"Excluído"';
                 $re = $conn->query($sql);
-                $r = $re->fetch_object();
-                if($r != null){
-                    $this->nProtocolo = $r->nProtocolo;
-                    $this->cpf_possuidor = $r->cpf_possuidor;
-                    $this->cpf_destinatario = $r->cpf_destinatario;
-                    $this->data_de_cadastro = $r->data_de_cadastro;
-                    $this->tipo = $r->tipo;
-                    $this->titulo = $r->titulo;
-                    $this->estado = $r->estado;
-                    $conn->close();
-                    return true;
-                }else{
-                    $conn->close();
-                    return false;
-                }
+                $conn->close();
+                return $re;
             }
+
+
+
+            public function carregarDocumentosNaTelaInicialGestor(){
+                require_once "ConexaoBD.php";
+    
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+    
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "SELECT * FROM documento";
+                $re = $conn->query($sql);
+                $conn->close();
+                return $re;
+            }
+
+
 
             public function receberDocumento(){
                 require_once "ConexaoBD.php";
