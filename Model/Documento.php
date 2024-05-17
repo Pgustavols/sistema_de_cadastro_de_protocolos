@@ -1,44 +1,44 @@
 <?php 
 
     class Documento {    
-        private $protocolo;
-        private $autor;
-        private $destinatario;
-        private $dataCadastro;
+        private $nProtocolo;
+        private $cpf_possuidor;
+        private $cpf_destinatario;
+        private $data_de_cadastro;
         private $tipo;
         private $titulo;
         private $estado;
 
         //Getters and setters
-            //Numero Protocolo
-            public function setProtocolo($protocolo){
-                $this->protocolo = $protocolo;
+            //Numero nProtocolo
+            public function setnProtocolo($nProtocolo){
+                $this->nProtocolo = $nProtocolo;
             }
-            public function getProtocolo(){
-                return $this->protocolo;
+            public function getnProtocolo(){
+                return $this->nProtocolo;
             }
             
-            //cpf autor
-            public function setAutor($autor){
-                $this->autor = $autor;
+            //cpf possuidor
+            public function setCpf_possuidor($cpf_possuidor){
+                $this->cpf_possuidor = $cpf_possuidor;
             }
-            public function getAutor(){
-                return $this->autor;
+            public function getCpf_possuidor(){
+                return $this->cpf_possuidor;
             }
             
             //CPF Destinatário
-            public function setDestinatario($destinatario){
-                $this->destinatario = $destinatario;
+            public function setCpf_destinatario($cpf_destinatario){
+                $this->cpf_destinatario = $cpf_destinatario;
             }
-            public function getDestinatatio(){
-                return $this->destinatario;
+            public function getCpf_destinatario(){
+                return $this->cpf_destinatario;
             }
             //Data Cadastro
-            public function setDataCadastro($dataCadastro){
-                $this->dataCadastro = $dataCadastro;
+            public function setData_de_cadastro($data_de_cadastro){
+                $this->data_de_cadastro = $data_de_cadastro;
             }
-            public function getDataCadastro(){
-                return $this->dataCadastro;
+            public function getData_de_cadastro(){
+                return $this->data_de_cadastro;
             }
             
             //Tipo
@@ -61,8 +61,165 @@
             public function setEstado($estado){
                 $this->estado = $estado;
             }
-            public function getEstado($estado){
-                return $this->$estado;
+            public function getEstado(){
+                return $this->estado;
+            }
+
+
+            public function carregarDocumentosNaTelaInicial($cpf_possuidor){
+                require_once "ConexaoBD.php";
+    
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+    
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "SELECT * FROM documento WHERE cpf_possuidor = ".$cpf_possuidor;
+                $re = $conn->query($sql);
+                $r = $re->fetch_object();
+                if($r != null){
+                    $this->nProtocolo = $r->nProtocolo;
+                    $this->cpf_possuidor = $r->cpf_possuidor;
+                    $this->cpf_destinatario = $r->cpf_destinatario;
+                    $this->data_de_cadastro = $r->data_de_cadastro;
+                    $this->tipo = $r->tipo;
+                    $this->titulo = $r->titulo;
+                    $this->estado = $r->estado;
+                    $conn->close();
+                    return true;
+                }else{
+                    $conn->close();
+                    return false;
+                }
+            }
+
+            public function receberDocumento(){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "UPDATE documento SET cpf_possuidor = '".$this->cpf_possuidor."', estado ='"."Recebido"."'WHERE nProtocolo = '".$this->nProtocolo.'";"';
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+
+            public function enviarDocumento(){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "UPDATE documento SET cpf_destinatario = '".$this->cpf_destinatario."', estado ='".
+                "Pendente"."'WHERE nProtocolo = '".$this->nProtocolo.'";"';
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+
+            public function alterarDocumento(){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "UPDATE documento SET titulo = '".$this->titulo."', estado ='".
+                "Alterado"."'WHERE nProtocolo = '".$this->nProtocolo.'";"';
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+
+            public function excluirDocumento(){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "UPDATE documento SET estado = ".'"Excluído"'.", cpf_possuidor = ".null.
+                'WHERE protocolo = '.$this->nProtocolo.";";
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+        
+
+            public function naoAceitarDocumentos(){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "UPDATE documento SET estado = ".'"Não aceito"'.", cpf_destinatario = ".$this->cpf_destinatario.
+                'WHERE protocolo = '.$this->nProtocolo.";";
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+
+            public function cadastrarDocumento(){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "INSERT INTO documento
+                (cpf_possuidor, cpf_destinatario, data_de_cadastro, tipo, titulo, estado) VALUES"."'"
+                ($this->cpf_possuidor, $this->cpf_destinatario, $this->data_de_cadastro, $this->tipo, $this->titulo, $this->estado).";'";
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
             }
 
     }
