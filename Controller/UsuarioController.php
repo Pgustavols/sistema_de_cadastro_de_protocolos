@@ -10,10 +10,10 @@
         $usuario = new Usuario();
         $usuario->setCPF($cpf);
         $usuario->setNome($nome);
-        $usuario->setEmail($setor);
+        $usuario->setSetor($setor);
         $usuario->setEmail($email);
         $usuario->setSenha($senha);
-        $usuario->setEmail($nivel);
+        $usuario->setNivel($nivel);
         $r = $usuario->inserirUsuario();
         $_SESSION['Usuario'] = serialize($usuario);
         return $r;
