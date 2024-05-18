@@ -49,5 +49,12 @@
             }
             return false;
         }
+
+        public function listaGestaoUsuarios(){
+            require_once '../Model/Usuario.php';
+            $usuario = new Usuario();
+            $r = $usuario->mostraListaDeUsuarios();
+            return $r;
+        }
     }
 ?>
