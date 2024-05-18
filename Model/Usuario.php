@@ -70,10 +70,10 @@
 
                 if ($conn->query($sql) === TRUE){
                     $conn->close();
-                    return TRUE;
+                    return true;
                 }else{
                     $conn->close();
-                    return FALSE;
+                    return false;
                 }
             }
 

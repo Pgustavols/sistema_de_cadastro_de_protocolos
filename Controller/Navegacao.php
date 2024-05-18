@@ -52,25 +52,21 @@
                 $_POST["txtSenha"],
                 $_POST["txtNivel"],
             )){
-                include_once "../View/inicioGestor.php";
-                echo "<script>
-                    alert('Cadastro realizado com sucesso');
-                        window.history.back();
-                  </script>";
+                include_once "../View/cadastroRealizado.php";
             } else {
-                include_once "../View/inicioGestor.php";
-                echo "<script>
-                    alert('Cadastro não realizado');
-                        window.history.back();
-                  </script>";
+                include_once "../View/cadastroNaoRealizado.php";
             }
             break;
 
-        // Botão cancelar
-        case isset($_POST["btnCancelar"]):
-            echo "<script>
-                window.history.back();
-                  </script>";
+        //Cadastro realizado
+        case isset($_POST["btnCadRealizado"]):
+            include_once "../View/inicioGestor.php";
             break;
+        
+        //Cadastro não realizado
+        case isset($_POST["btnCadNaoRealizado"]):
+            include_once "../View/inicioGestor.php";
+            break;
+
     }
 ?>

@@ -172,11 +172,11 @@
                 <br>
                     <table class="table table-striped table-hover rounded-3 shadow">
                         <thead>
-                            <th>Nome</th>
-                            <th>Setor</th>
-                            <th>Nível</th>
-                            <th>Editar</th>
-                            <th>Excluir</th>
+                            <th class="text-center">Nome</th>
+                            <th class="text-center">Setor</th>
+                            <th class="text-center">Nível</th>
+                            <th class="text-center">Editar</th>
+                            <th class="text-center">Desativar</th>
                         </thead>
                         <?php
                     $dCon = new UsuarioController();
@@ -184,22 +184,19 @@
                     if($results != null)
                     while($row = $results->fetch_object()) {
                     echo '<tr>';
-                    echo '<td>'.$row->nome.'</td>';
-                    echo '<td>'.$row->setor.'</td>';
-                    echo '<td>'.$row->nivel.'</td>';
+                    echo '<td class="text-center">'.$row->nome.'</td>';
+                    echo '<td class="text-center">'.$row->setor.'</td>';
+                    echo '<td class="text-center">'.$row->nivel.'</td>';
                     echo '<td>
-                    <form action="../Controller/Navegacao.php" method="post">
+                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
                         <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
-                        <button name="btnEditarUsuario" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
-                        <i class="bi bi-pencil"></i></button></td>';
+                        <button name="btnEditarUsuario" class="text-center btn btn-primary">
+                        <i class="bi bi-pencil"></i></button></form></td>';
                         echo '<td>
-                        <form action="../Controller/Navegacao.php" method="post">
-                        <input type="hidden" name="cpfExc" value="'.$row->cpf.'">
-                        <button name="btnExcluirUsuario" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
-                        <i class="bi bi-trash"></i></button></td>
-                    </form>';
+                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                        <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
+                        <button name="btnDesativarUsuario" class="text-center btn btn-danger">
+                        <i class="bi bi-person-fill-x"></i></button></form></td>';
                     echo '</tr>';
                     }
             ?>
@@ -212,6 +209,9 @@
     <div class="modal fade" id="telaNovoFuncionario" tabindex="-1" aria-labelledby="telaNovoFuncionarioLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
                 <div class="modal-body row align-items-center p-4">
                     <div class="col-6 text-center">
                         <img src="../Img/Logo.png" alt="Logo" class="figure-img img-fluid rounded">
@@ -237,16 +237,13 @@
                                     <label for="txtEmail">E-mail</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="txtSenha" name="txtSenha" placeholder="Senha">
-                                    <label for="txtSenha">Senha</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="txtConfirmSenha" name="txtConfirmarSenha" placeholder="Confirmar Senha">
-                                    <label for="txtConfirmarSenha">Confirmar Senha</label>
-                                </div>
-                                <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="txtNivel" name="txtNivel" placeholder="Nível">
                                     <label for="txtNivel">Nível</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="txtSenha" name="txtSenha" placeholder="Senha">
+                                    <label for="txtSenha">Senha</label>
+                                    <span id="senha-error" class="error"></span>
                                 </div>
                             <button name="btnCadastrarUser" class="btn btn-dark">Cadastrar</button>
                         </form>
@@ -280,11 +277,11 @@
     <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
         <table class="table table-striped table-hover">
             <thead>
-                <th>Nº Protocolo</th>
-                <th>Título</th>
-                <th>Possuidor</th>
-                <th>Data de cadastro</th>
-                <th>Status</th>
+                <th class="text-center">Nº Protocolo</th>
+                <th class="text-center">Título</th>
+                <th class="text-center">Possuidor</th>
+                <th class="text-center">Data de cadastro</th>
+                <th class="text-center">Status</th>
                 <th class="text-center">Visualizar</th>
                 <th class="text-center">Histórico</th>
             </thead>
@@ -294,24 +291,21 @@
                 if($results != null)
                 while($row = $results->fetch_object()) {
                 echo '<tr>';
-                echo '<td>'.$row->nProtocolo.'</td>';
-                echo '<td>'.$row->titulo.'</td>';
-                echo '<td>'.$row->nome.'</td>';
-                echo '<td>'.$row->data_de_cadastro.'</td>';
-                echo '<td>'.$row->estado.'</td>';
+                echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                echo '<td class="text-center">'.$row->titulo.'</td>';
+                echo '<td class="text-center">'.$row->nome.'</td>';
+                echo '<td class="text-center">'.$row->data_de_cadastro.'</td>';
+                echo '<td class="text-center">'.$row->estado.'</td>';
                 echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
                 <input type="hidden" name="nProtocoloVisualizacaoGestor" value="'.$row->nProtocolo.'">
-                <button name="btnVisualizarDocGestor" class="w3-button w3-block w3-blue
-                w3-cell w3-round-large">
-                <i class="bi bi-eye"></i></button></td>';
+                <button name="btnVisualizarDocGestor" class="btn btn-dark">
+                <i class="bi bi-eye"></i></button></form></td>';
                 echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
                 <input type="hidden" name="nProtocoloHistGestor" value="'.$row->nProtocolo.'">
-                <button name="btnHistoricoDocGestor" class="w3-button w3-block w3-blue
-                w3-cell w3-round-large">
-                <i class="bi bi-clock-history"></i></button></td>
-                </form>';
+                <button name="btnHistoricoDocGestor" class="btn btn-dark">
+                <i class="bi bi-clock-history"></i></button></form></td>';
                 echo '</tr>';
                 }
             ?>
