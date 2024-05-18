@@ -174,11 +174,36 @@
                         <thead>
                             <th>Nome</th>
                             <th>Setor</th>
-                            <th>Cargo</th>
-                            <th>Status</th>
+                            <th>Nível</th>
                             <th>Editar</th>
                             <th>Excluir</th>
                         </thead>
+                        <?php
+                    $dCon = new UsuarioController();
+                    $results = $dCon->listaGestaoUsuarios();
+                    if($results != null)
+                    while($row = $results->fetch_object()) {
+                    echo '<tr>';
+                    echo '<td>'.$row->nome.'</td>';
+                    echo '<td>'.$row->setor.'</td>';
+                    echo '<td>'.$row->nivel.'</td>';
+                    echo '<td>
+                    <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
+                        <button name="btnEditarUsuario" class="w3-button w3-block w3-blue
+                        w3-cell w3-round-large">
+                        <i class="bi bi-pencil"></i></button></td>';
+                        echo '<td>
+                        <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="cpfExc" value="'.$row->cpf.'">
+                        <button name="btnExcluirUsuario" class="w3-button w3-block w3-blue
+                        w3-cell w3-round-large">
+                        <i class="bi bi-trash"></i></button></td>
+                    </form>';
+                    echo '</tr>';
+                    }
+            ?>
+
                     </table>
                 </div>
             </div>
@@ -216,8 +241,8 @@
                                     <label for="txtSenha">Senha</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="txtConfirmSenha" name="txtConfimrSenha" placeholder="Confirmar Senha">
-                                    <label for="txtSenha">Confirmar Senha</label>
+                                    <input type="password" class="form-control" id="txtConfirmSenha" name="txtConfirmarSenha" placeholder="Confirmar Senha">
+                                    <label for="txtConfirmarSenha">Confirmar Senha</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="txtNivel" name="txtNivel" placeholder="Nível">
@@ -271,18 +296,18 @@
                 echo '<tr>';
                 echo '<td>'.$row->nProtocolo.'</td>';
                 echo '<td>'.$row->titulo.'</td>';
-                echo '<td>'.$row->cpf_possuidor.'</td>';
+                echo '<td>'.$row->nome.'</td>';
                 echo '<td>'.$row->data_de_cadastro.'</td>';
                 echo '<td>'.$row->estado.'</td>';
-                echo '<td>
+                echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloExc" value="'.$row->nProtocolo.'">
+                <input type="hidden" name="nProtocoloVisualizacaoGestor" value="'.$row->nProtocolo.'">
                 <button name="btnVisualizarDocGestor" class="w3-button w3-block w3-blue
                 w3-cell w3-round-large">
                 <i class="bi bi-eye"></i></button></td>';
-                echo '<td>
+                echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                <input type="hidden" name="nProtocoloHistGestor" value="'.$row->nProtocolo.'">
                 <button name="btnHistoricoDocGestor" class="w3-button w3-block w3-blue
                 w3-cell w3-round-large">
                 <i class="bi bi-clock-history"></i></button></td>
