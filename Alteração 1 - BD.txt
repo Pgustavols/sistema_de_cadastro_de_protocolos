@@ -5,3 +5,17 @@ ALTER TABLE `sistema_de_protocolo`.`documento`
 CHANGE COLUMN `tipo` `tipo` ENUM('Requerimento', 'Pedido de Compra', 'Ata', 'Relatório') NOT NULL ;
 
 alter table usuario modify column nivel enum("Comum", "Gerente", "Desativado") not null;
+
+
+delimiter //
+	create trigger transfere_documentos_para_gestor after update on usuario for each row 
+    begin
+		if(new.setor = "Desativado" and new.nivel = "Desativado") then
+        
+			if(select count(*) from documento where cpf_possuidor = new.cpf or cpf_destinatario = new.cpf) > 0 then
+				update documento set cpf_destinatario = (select cpf from usuario where nivel = "Gerente" limit 1),
+				estado = "Pendente" where cpf_possuidor = new.cpf or cpf_destinatario = new.cpf;
+            end if ;
+		end if;
+    end ;
+// delimiter ;
