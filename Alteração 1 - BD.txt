@@ -1,4 +1,7 @@
 -- O tipo de documento está com o enum "Requirimento", segue alteração para correto
+use sistema_de_protocolo;
 
 ALTER TABLE `sistema_de_protocolo`.`documento` 
 CHANGE COLUMN `tipo` `tipo` ENUM('Requerimento', 'Pedido de Compra', 'Ata', 'Relatório') NOT NULL ;
+
+alter table usuario modify column nivel enum("Comum", "Gerente", "Desativado") not null;
