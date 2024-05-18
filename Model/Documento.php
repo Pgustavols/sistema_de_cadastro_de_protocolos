@@ -96,7 +96,11 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "SELECT * FROM documento";
+                // $sql = "SELECT * FROM documento";
+                $sql = "SELECT nProtocolo, titulo, nome, data_de_cadastro, estado
+                FROM documento
+                INNER JOIN usuario ON cpf = cpf_possuidor
+                ORDER BY nProtocolo";
                 
                 $re = $conn->query($sql);
                 $conn->close();
