@@ -189,23 +189,20 @@
                         <label for="txtDestinatario" class="form-label">Destinatário</label>
 
                         <select class="form-select" id="txtDestinatario" name="txtDestinatario">
-                            <?php foreach ($destinatarios as $destinatario): ?>
-                                <option value="<?php echo htmlspecialchars($destinatario['cpf']);
-                                    $usuario2 = new Usuario();
-                                    $cpf_da_option = htmlspecialchars($destinatario['cpf']);
-                                    $setorDestinatario = $usuario2->listaSetorDestinatario($cpf_da_option); 
-                                ?>">
-                                    <?php echo htmlspecialchars($destinatario['nome']); ?>
-                                </option>
-                            <?php endforeach; ?>
+                        <?php foreach ($destinatarios as $destinatario): ?>
+                                    <option value="<?php echo htmlspecialchars($destinatario['cpf']); ?>">
+                                        <?php echo htmlspecialchars($destinatario['nome']); ?>
+                                    </option>
+                                <?php endforeach; ?>
                         </select>
                         </div>
+
                         <div class="col-4 my-3">
                             <label for="txtSetor" class="form-label">Setor Destinatário</label>
-                            <input class="form-control" id="txtSetor" name="txtSetor" placeholder="<?php echo htmlspecialchars($setorDestinatario); ?>" disabled>
+                            <input class="form-control" id="txtSetor" name="txtSetor" placeholder="" disabled>
                         </div>
                         <button class="col-5 btn btn-danger my-3">Cancelar</button>
-                        <button class="col-5 btn btn-dark my-3">Cadastrar</button>
+                        <button class="col-5 btn btn-dark my-3" name="btnCadastrarDocumentoGestor">Cadastrar</button>
                     </form>
                 </div>
             </div>
