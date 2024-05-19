@@ -313,7 +313,7 @@
             </thead>
             <?php
                 $dCon = new DocumentoController();
-                $results = $dCon->telaInicialdocumento();
+                $results = $dCon->telaInicialdocumento(unserialize($_SESSION['Usuario'])->getCPF(), unserialize($_SESSION['Usuario'])->getCPF());
                 if($results != null)
                 while($row = $results->fetch_object()) {
                 echo '<tr>';
