@@ -211,7 +211,7 @@
                     echo '<tr>';
                     echo '<td class="text-center">'.$row->nProtocolo.'</td>';
                     echo '<td class="text-center">'.$row->titulo.'</td>';
-                    echo '<td class="text-center">'.$row->data_de_cadastro.'</td>';
+                    echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_de_cadastro)).'</td>';
                     echo '<td class="text-center">'.$row->estado.'</td>';
                     echo '<td class="text-center">
                     <form action="../Controller/Navegacao.php" method="post">

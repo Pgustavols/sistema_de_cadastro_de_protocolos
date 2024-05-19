@@ -264,7 +264,7 @@
                     <div class="col-6 text-center">
                         <img src="../Img/Logo1.png" alt="Logo" class="figure-img img-fluid rounded">
                         <h1>Cadastro de usuário</h1>
-                        <p class="text-break">Insira as informações do funcionários</p>
+                        <p class="text-break">Insira as informações do funcionário</p>
                     </div>
                     <div class="col-6">
                             <form action="../Controller/Navegacao.php" method="POST">
