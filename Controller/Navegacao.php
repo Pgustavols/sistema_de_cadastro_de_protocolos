@@ -68,5 +68,20 @@
             include_once "../View/inicioGestor.php";
             break;
 
+
+        case isset($_POST["btnConfirmarDocumentoComum"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+            if ($documentoController->aceitacaoDoDocumento($_POST["nProtocoloConfirmarComum"], unserialize($_SESSION['Usuario'])->getCPF())) {
+                echo "<script>
+                alert('Documento Aceito');
+                window.history.back();
+                </script>";
+                include_once "../View/inicioUsuario.php";
+            } else {
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
     }
 ?>
