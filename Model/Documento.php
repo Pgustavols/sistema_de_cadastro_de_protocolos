@@ -222,7 +222,7 @@
                 }
             }
 
-            public function cadastrarDocumento(){
+            public function escreverDocumento($cpf_possuidor, $cpf_destinatario, $tipo, $titulo){
                 require_once "ConexaoBD.php";
 
                 $con = new ConexaoBD();
@@ -230,10 +230,15 @@
                 if($conn->connect_error){
                     die("Connection failed: ".$conn->connect_error);
                 }
-    
-                $sql = "INSERT INTO documento
-                (cpf_possuidor, cpf_destinatario, data_de_cadastro, tipo, titulo, estado) VALUES"."'"
-                ($this->cpf_possuidor, $this->cpf_destinatario, $this->data_de_cadastro, $this->tipo, $this->titulo, $this->estado).";'";
+
+                $sql = "INSERT INTO documento (cpf_possuidor, cpf_destinatario, data_de_cadastro, tipo, titulo, estado) VALUES (
+                    '$cpf_possuidor',
+                    '$cpf_destinatario',
+                    CURDATE(),
+                    '$tipo',
+                    '$titulo',
+                    'Pendente'
+                );";
                
                 if($conn->query($sql) === TRUE){
                     $conn->close();
