@@ -28,5 +28,12 @@
             $resultado = $documento->carregarDocumentosNaTelaInicialComum($cpf_possuidor);
             return $resultado;
         }
+
+        public function telaPendentes($cpf_destinatario){
+            require_once "../Model/Documento.php";
+            $documento = new Documento();
+            $r = $documento->documentosPendente($cpf_destinatario);
+            return $r;
+        }
     }
 ?>
