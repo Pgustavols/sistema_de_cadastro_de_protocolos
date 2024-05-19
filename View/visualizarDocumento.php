@@ -18,8 +18,6 @@
 <body style="background-color: #D9D9D9;">
 <?php
     include_once '../Controller/DocumentoController.php';
-    include_once '../Controller/UsuarioController.php';
-    include_once '../Model/Usuario.php';
     if(!isset($_SESSION))
         {
         session_start();
@@ -31,25 +29,28 @@
 <main class="container-fluid p-4 font-padrao">
     <div class="container m-auto bg-white rounded shadow p-4 border">
         <?php 
-
-
+        require_once '../Controller/DocumentoController.php';
+        $dCon = new DocumentoController();
+        $nProtocolo = $_GET['nProtocolo'];
+        $documento = $dCon->visualizarDocumento($nProtocolo);
+        
         echo "
         <form action='' method='POST' class='row g-3 justify-content-between'>
             <div class='col-2 my-3'>
                     <label for='txtProtocolo' class='form-label'>Nº Protocolo</label>
-                    <input type='number' class='form-control' id='txtProtocolo' name='txtProtocolo' disabled value='"."'>
+                    <input type='number' class='form-control' id='txtProtocolo' name='txtProtocolo' disabled value='.$documento->nProtocolo.'>
             </div>
             <div class='col-10 my-3'>
                 <label for='txtTitulo' class='form-label'>Título</label>
-                <input type='text' class='form-control' id='txtTitulo' name='txtTitulo' value='"."'>
+                <input type='text' class='form-control' id='txtTitulo' name='txtTitulo' value='.$documento->titulo.'>
             </div>
             <div class='col-3 my-3'>
                 <label for='txtData' class='form-label'>Data de cadastro</label>
-                <input type='date' class='form-control' id='txtData' name='txtData' disabled value='"."'>
+                <input type='date' class='form-control' id='txtData' name='txtData' disabled value='.$documento->data_de_cadastro.'>
             </div>
             <div class='col-6 my-3'>
                 <label for='txtPossuidor' class='form-label'>Possuidor</label>
-                <input type='text' class='form-control' id='txtPossuidor' name='txtPossuidor' disabled value='"."'>
+                <input type='text' class='form-control' id='txtPossuidor' name='txtPossuidor' disabled value='.$documento->cpf_possuidor.'>
             </div>
             <div class='col-3 my-3'>
                 <label for='txtTipo' class='form-label'>Tipo Documento</label>
@@ -62,7 +63,7 @@
             </div>
             <div class='col-8 my-3'>
                 <label for='txtDestinatario' class='form-label'>Destinatário</label>
-                <input class='form-control' id='txtDestinatario' name='txtDestinatario' disabled value='"."'>
+                <input class='form-control' id='txtDestinatario' name='txtDestinatario' disabled value='.$documento->cpf_destinatario.'>
             </div>
             <div class='col-4 my-3'>
                 <label for='txtSetor' class='form-label'>Setor Destinatário</label>
