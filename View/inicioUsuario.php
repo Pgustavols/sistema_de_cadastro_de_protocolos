@@ -25,16 +25,34 @@
         {
         session_start();
         }
+
+        require_once '../Model/Documento.php';
+        $documento = new Documento();
+        $protocolo = $documento->pegaNumeroProtocolo();
+
+        require_once '../Model/Usuario.php';
+
+        $cpf_logado = unserialize($_SESSION['Usuario'])->getCPF(); // O CPF do usuário logado deve ser definido aqui
+        $usuario = new Usuario();
+        $destinatarios = $usuario->listaDestinatarios($cpf_logado);
+
+        $destinatarios_js = array();
+        foreach ($destinatarios as $destinatario) {
+            $cpf_da_option = $destinatario['cpf'];
+            $setorDestinatario = $usuario->listaSetorDestinatario($cpf_da_option);
+            $destinatarios_js[] = array('cpf' => $cpf_da_option, 'nome' => $destinatario['nome'], 'setor' => $setorDestinatario);
+    }
 ?>
 <header class="container-fluid bg-dark shadow p-4">
-    <h1 class="font-padrao text-white ">Olá, seja bem vindo(a)</h1>
+    <h1 class="font-padrao text-white ">Olá, seja bem vindo(a) <?php echo $_SESSION['nome'];?></h1>
+    <form action="../Controller/Navegacao.php" method="post"><button name="btnDeslogar" class="btn btn-danger position-absolute top-0 end-0 m-4"><i class="bi bi-box-arrow-right"></i></button></form>
 </header>
 <main class="container-fluid p-3">
     <div class="my-3 p-3 m-auto font-padrao row justify-content-between">
         <div class="col-9">
-            <form action="" class="input-group mb-3 h-100">
+            <form action="../Controller/Navegacao.php" class="input-group mb-3 h-100">
                 <input type="number" class="form-control" id="pesquisa" name="pesquisa" placeholder="Pesquisar por Nº de Protocolo">
-                <button class="btn btn-dark" id="btnPesquisar" name="btnPesquisar">
+                <button name="btnPesquisar" class="btn btn-dark" id="btnPesquisar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                     </svg>
@@ -67,15 +85,15 @@
                     <h5 class="modal-title" id="telaDocumentoPendenteLabel">Documentos Pendentes</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body table-responsive" style="max-height: 400px;">
                     <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th>Nº Protocolo</th>
-                            <th>Título</th>
-                            <th>Enviado por</th>
-                            <th>Data de Envio</th>
-                            <th>Confirmar</th>
-                            <th>Recusar</th>
+                        <thead class="table-dark">
+                        <th class="text-center">Nº Protocolo</th>
+                        <th class="text-center">Título</th>
+                        <th class="text-center">Enviado por</th>
+                        <th class="text-center">Data de Envio</th>
+                        <th class="text-center">Confirmar</th>
+                        <th class="text-center">Recusar</th>
                         </thead>
                         <?php
                     $dCon = new DocumentoController();
@@ -83,21 +101,19 @@
                     if($results != null)
                     while($row = $results->fetch_object()) {
                     echo '<tr>';
-                    echo '<td>'.$row->nProtocolo.'</td>';
-                    echo '<td>'.$row->titulo.'</td>';
-                    echo '<td>'.$row->nome.'</td>';
-                    echo '<td>'.$row->data_da_acao.'</td>';
-                    echo '<td>
+                    echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                    echo '<td class="text-center">'.$row->titulo.'</td>';
+                    echo '<td class="text-center">'.$row->nome.'</td>';
+                    echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_da_acao)).'</td>';
+                    echo '<td class="text-center">
                     <form action="../Controller/Navegacao.php" method="post">
                         <input type="hidden" name="nProtocoloConfirmarComum" value="'.$row->nProtocolo.'">
-                        <button name="btnConfirmarDocumentoComum" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
+                        <button name="btnConfirmarDocumentoComum" class="btn btn-success">
                         <i class="bi bi-check"></i></button></td>';
-                        echo '<td>
+                        echo '<td class="text-center">
                         <form action="../Controller/Navegacao.php" method="post">
                         <input type="hidden" name="nProtocoloRecusarComum" value="'.$row->nProtocolo.'">
-                        <button name="btnRecusarDocumento" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
+                        <button name="btnRecusarDocumento" class="btn btn-danger">
                         <i class="bi bi-x"></i></button></td>
                     </form>';
                     echo '</tr>';
@@ -158,51 +174,33 @@
                         <div class="col-8 my-3">
                             <label for="txtDestinatario" class="form-label">Destinatário</label>
                             <select class="form-select" id="txtDestinatario" name="txtDestinatario">
-                                
+                            <?php foreach ($destinatarios as $destinatario): ?>
+                                    <option value="<?php echo htmlspecialchars($destinatario['cpf']); ?>">
+                                        <?php echo htmlspecialchars($destinatario['nome']); ?>
+                                    </option>
+                                <?php endforeach; ?> 
                             </select>
                         </div>
                         <div class="col-4 my-3">
                             <label for="txtSetor" class="form-label">Setor Destinatário</label>
                             <input class="form-control" id="txtSetor" name="txtSetor" disabled>
                         </div>
-                        <button class="col-5 btn btn-danger my-3">Cancelar</button>
+                        <button name="btnCancelar" class="col-5 btn btn-danger my-3">Cancelar</button>
                         <button class="col-5 btn btn-dark my-3">Cadastrar</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="telaHistoricoDocumento" tabindex="-1" aria-labelledby="telaHistoricoDocumentoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="telaHistoricoDocumentoLabel">Histórico do Documento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Nº protocolo</p>
-                    <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Autor</th>
-                            <th>Movimentação</th>
-                            <th>Destino</th>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
+    <div class="mx-4 p-3 font-padrao rounded-3 shadow table-responsive" style="max-height: 400px; background-color: white;">
         <table class="table table-striped table-hover">
-            <thead>
-                <th>Nº Protocolo</th>
-                <th>Título</th>
-                <th>Data de cadastro</th>
-                <th>Status</th>
-                <th>Visualizar</th>
-                <th>Histórico</th>
+            <thead class="table-dark">
+                <th class="text-center">Nº Protocolo</th>
+                <th class="text-center">Título</th>
+                <th class="text-center">Data de cadastro</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Visualizar</th>
+                <th class="text-center">Histórico</th>
             </thead>
             <?php
                 $dCon = new DocumentoController();
@@ -210,21 +208,19 @@
                 if($results != null)
                 while($row = $results->fetch_object()) {
                 echo '<tr>';
-                echo '<td>'.$row->nProtocolo.'</td>';
-                echo '<td>'.$row->titulo.'</td>';
-                echo '<td>'.$row->data_de_cadastro.'</td>';
-                echo '<td>'.$row->estado.'</td>';
-                echo '<td>
+                echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                echo '<td class="text-center">'.$row->titulo.'</td>';
+                echo '<td class="text-center">'.$row->data_de_cadastro.'</td>';
+                echo '<td class="text-center">'.$row->estado.'</td>';
+                echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloVisualizacaoComum" value="'.$row->nProtocolo.'">
-                <button name="btnVisualizarDocComum" class="w3-button w3-block w3-blue
-                w3-cell w3-round-large">
+                <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
+                <button name="btnVisualizarDoc" class="btn btn-dark">
                 <i class="bi bi-eye"></i></button></td>';
-                echo '<td>
+                echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloHistComum" value="'.$row->nProtocolo.'">
-                <button name="btnHistoricoDocComum" class="w3-button w3-block w3-blue
-                w3-cell w3-round-large">
+                <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                <button name="btnHistoricoDoc" class="btn btn-dark">
                 <i class="bi bi-clock-history"></i></button></td>
                 </form>';
                 echo '</tr>';
@@ -238,6 +234,22 @@
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const destinatarios = <?php echo json_encode($destinatarios_js); ?>;
+        const destinatarioSelect = document.getElementById('txtDestinatario');
+        const setorInput = document.getElementById('txtSetor');
+
+        destinatarioSelect.addEventListener('change', function() {
+            const selectedCpf = destinatarioSelect.value;
+            const selectedDestinatario = destinatarios.find(dest => dest.cpf === selectedCpf);
+            setorInput.placeholder = selectedDestinatario ? selectedDestinatario.setor : '';
+        });
+
+        // Trigger change event on page load to set the initial value
+        destinatarioSelect.dispatchEvent(new Event('change'));
     });
 </script>
 </body>

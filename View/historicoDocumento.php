@@ -67,7 +67,7 @@
         function returnToMainPage() {
             if ("<?php echo $nivelUsuario; ?>" === 'Gerente') {
                 window.location.href = '../View/inicioGestor.php';
-            } else if ("<?php echo $nivelUsuario; ?>" === 'Usuário') {
+            } else if ("<?php echo $nivelUsuario; ?>" === 'Comum') {
                 window.location.href = '../View/inicioUsuario.php';
             }
         }

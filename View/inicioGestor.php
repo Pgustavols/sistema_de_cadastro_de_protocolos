@@ -56,7 +56,7 @@
         <div class="col-7">
             <form action="../Controller/Navegacao.php" class="input-group mb-3 h-100">
                 <input type="number" class="form-control" id="pesquisa" name="pesquisa" placeholder="Pesquisar por Nº de Protocolo">
-                <button class="btn btn-dark" id="btnPesquisar" name="btnPesquisar"> 
+                <button name="btnPesquisar" class="btn btn-dark" id="btnPesquisar"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                     </svg>
@@ -98,9 +98,9 @@
                     <h5 class="modal-title" id="telaDocumentoPendenteLabel">Documentos Pendentes</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body table-responsive" style="max-height: 400px;">
                     <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
+                        <thead class="table-dark">
                             <th class="text-center">Nº Protocolo</th>
                             <th class="text-center">Título</th>
                             <th class="text-center">Enviado por</th>
@@ -186,7 +186,6 @@
                         </div>
                         <div class="col-8 my-3">
                         <label for="txtDestinatario" class="form-label">Destinatário</label>
-
                         <select class="form-select" id="txtDestinatario" name="txtDestinatario">
                         <?php foreach ($destinatarios as $destinatario): ?>
                                     <option value="<?php echo htmlspecialchars($destinatario['cpf']); ?>">
@@ -195,7 +194,6 @@
                                 <?php endforeach; ?>
                         </select>
                         </div>
-
                         <div class="col-4 my-3">
                             <label for="txtSetor" class="form-label">Setor Destinatário</label>
                             <input class="form-control" id="txtSetor" name="txtSetor" placeholder="" disabled>
@@ -222,38 +220,39 @@
                     </svg>
                 </button>
                 <br>
-                    <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th class="text-center">Nome</th>
-                            <th class="text-center">Setor</th>
-                            <th class="text-center">Nível</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center">Desativar</th>
-                        </thead>
-                        <?php
-                    $dCon = new UsuarioController();
-                    $results = $dCon->listaGestaoUsuarios();
-                    if($results != null)
-                    while($row = $results->fetch_object()) {
-                    echo '<tr>';
-                    echo '<td class="text-center">'.$row->nome.'</td>';
-                    echo '<td class="text-center">'.$row->setor.'</td>';
-                    echo '<td class="text-center">'.$row->nivel.'</td>';
-                    echo '<td>
-                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
-                        <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
-                        <button name="btnEditarUsuario" class="text-center btn btn-primary">
-                        <i class="bi bi-pencil"></i></button></form></td>';
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-striped table-hover rounded-3 shadow">
+                            <thead class="table-dark">
+                                <th class="text-center">Nome</th>
+                                <th class="text-center">Setor</th>
+                                <th class="text-center">Nível</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center">Desativar</th>
+                            </thead>
+                            <?php
+                        $dCon = new UsuarioController();
+                        $results = $dCon->listaGestaoUsuarios();
+                        if($results != null)
+                        while($row = $results->fetch_object()) {
+                        echo '<tr>';
+                        echo '<td class="text-center">'.$row->nome.'</td>';
+                        echo '<td class="text-center">'.$row->setor.'</td>';
+                        echo '<td class="text-center">'.$row->nivel.'</td>';
                         echo '<td>
-                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
-                        <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
-                        <button name="btnDesativarUsuario" class="text-center btn btn-danger">
-                        <i class="bi bi-person-fill-x"></i></button></form></td>';
-                    echo '</tr>';
-                    }
-            ?>
-
-                    </table>
+                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                            <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
+                            <button name="btnEditarUsuario" class="text-center btn btn-primary">
+                            <i class="bi bi-pencil"></i></button></form></td>';
+                            echo '<td>
+                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                            <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
+                            <button name="btnDesativarUsuario" class="text-center btn btn-danger">
+                            <i class="bi bi-person-fill-x"></i></button></form></td>';
+                        echo '</tr>';
+                        }
+                                    ?>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -302,9 +301,9 @@
             </div>
         </div>
     </div>
-    <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
+    <div class="mx-4 p-3 font-padrao rounded-3 shadow table-responsive" style="max-height: 400px;background-color: white;">
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class="table-dark">
                 <th class="text-center">Nº Protocolo</th>
                 <th class="text-center">Título</th>
                 <th class="text-center">Possuidor</th>
@@ -363,6 +362,5 @@
         destinatarioSelect.dispatchEvent(new Event('change'));
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -31,7 +31,7 @@
                     
                         if($result['nivel'] == 'Gerente'){
                             include_once "../View/inicioGestor.php";
-                        } elseif ($result['nivel'] == 'Usuário'){
+                        } elseif ($result['nivel'] == 'Comum'){
                             include_once "../View/inicioUsuario.php";
                         }
                     }  else{
@@ -139,7 +139,7 @@
             case isset($_POST["btnCadRealizado"]):
                 if($_SESSION['nivel'] == 'Gerente'){
                     include_once "../View/inicioGestor.php";
-                } elseif ($_SESSION['nivel'] == 'Usuário'){
+                } elseif ($_SESSION['nivel'] == 'Comum'){
                     include_once "../View/inicioUsuario.php";
                 }
                 break;
@@ -148,7 +148,7 @@
             case isset($_POST["btnCadNaoRealizado"]):
                 if($_SESSION['nivel'] == 'Gerente'){
                     include_once "../View/inicioGestor.php";
-                } elseif ($_SESSION['nivel'] == 'Usuário'){
+                } elseif ($_SESSION['nivel'] == 'Comum'){
                     include_once "../View/inicioUsuario.php";
                 }
                 break;
@@ -157,7 +157,7 @@
             case isset($_POST["btnCancelar"]):
                 if($_SESSION['nivel'] == 'Gerente'){
                     include_once "../View/inicioGestor.php";
-                } elseif ($_SESSION['nivel'] == 'Usuário'){
+                } elseif ($_SESSION['nivel'] == 'Comum'){
                     include_once "../View/inicioUsuario.php";
                 }
                 break;
