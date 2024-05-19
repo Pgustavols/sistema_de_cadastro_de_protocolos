@@ -43,7 +43,7 @@
         <div class="col-6">
         <form action="../Controller/Navegacao.php" method="POST">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="txtCPF" name="txtCPF" placeholder="CPF" disabled value="<?php echo $_GET['cpf']?>">
+                <input type="text" class="form-control" id="txtCPF" name="txtCPF" placeholder="CPF" value="<?php echo $_GET['cpf']?>" readonly>
                 <label for="txtCPF">CPF</label>
             </div>
             <div class="form-floating mb-3">
@@ -65,7 +65,6 @@
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="txtSenha" name="txtSenha" placeholder="Senha" value="<?php echo $_GET['senha']?>">
                 <label for="txtSenha">Senha</label>
-                <span id="senha-error" class="error"></span>
             </div>
             <button name="btnCancelar" class="btn btn-danger">Cancelar</button>
             <button name="btnAlterarUser" class="btn btn-dark">Alterar</button>

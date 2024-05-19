@@ -23,21 +23,21 @@
         }
 
         .animated-button:hover {
-            background-color: #B30000;
+            background-color: #134DD4;
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            animation-duration: 1s;
         }
 
         .animated-button:active {
-            background-color: #A90000;
+            background-color: #0D3491;
             transform: scale(1);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-
         .entrada {
         width: 300px;
         height: 150px;
-        background-color: #D40000;
+        background-color: #175DFF;
         animation: slideIn 1s; /* Nome da animação e duração */
         }
 
@@ -51,12 +51,12 @@
             50% {
                 width: 350px;
                 height: 175px;
-                background-color: #D40000;
+                background-color: #175DFF;
             }
             100% {
                 width: 300px;
                 height: 150px;
-                background-color: #D40000;
+                background-color: #175DFF;
             }
         }
     </style>
@@ -64,7 +64,7 @@
 <body>
     <form action="../Controller/Navegacao.php" method="post" class="container m-3 p-4 text-center" style="width: 30%;">
         <div>
-            <button name="btnCadNaoRealizado" class="btn btn-danger rounded fw-bold shadow animated-button">Cadastro não Realizado!</button>
+            <button name="btnAltRealizada" class="btn btn-primary rounded fs-4 fw-bold shadow animated-button entrada">Alteração Realizada com Sucesso!</button>
         </div>
     </form>
 </body>

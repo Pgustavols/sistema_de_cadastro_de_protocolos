@@ -49,7 +49,7 @@
 ?>
 <header class="container-fluid bg-dark shadow p-4">
     <h1 class="font-padrao text-white ">Olá, seja bem vindo(a) <?php echo $_SESSION['nome'];?></h1>
-    <form action="" method="post"><button name="btnDeslogar" class="btn btn-danger position-absolute top-0 end-0 m-4"><i class="bi bi-box-arrow-right"></i></button></form>
+    <form action="../Controller/Navegacao.php" method="post"><button name="btnDeslogar" class="btn btn-danger position-absolute top-0 end-0 m-4"><i class="bi bi-box-arrow-right"></i></button></form>
 </header>
 <main class="container-fluid p-3">
     <div class="my-3 p-3 m-auto font-padrao row justify-content-between">

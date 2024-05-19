@@ -86,6 +86,25 @@
             }
             break;
 
+        //Alterar usuario
+        case isset($_POST["btnAlterarUser"]):
+            require_once "../Controller/UsuarioController.php";
+            $uController = new UsuarioController();
+
+            if ($uController->atualizar(
+                $_POST["txtNome"],
+                $_POST["txtEmail"],
+                $_POST["txtSetor"],
+                $_POST["txtSenha"],
+                $_POST["txtCPF"],
+
+            )){
+                include_once "../View/alteracaoRealizada.php";
+            } else {
+                include_once "../View/alteracaoNaoRealizada.php";
+            }
+            break;
+
         //Confirmar documento
         case isset($_POST["btnConfirmarDocumentoComum"]):
             require_once "../Model/Usuario.php";
@@ -127,71 +146,89 @@
             }
             break;
 
-            //Historico documento
-            case isset($_POST["btnHistoricoDoc"]):
-                require_once "../Model/Movimentacao.php";
-                
-                $movimentacaoController = new Movimentacao();
-                $results = $movimentacaoController->carregarMovimentacoes($_POST['nProtocoloHist']);
-                
-                if ($results) {
-                    // Construa a URL de redirecionamento com os parâmetros extraídos
-                    $url = "../View/historicoDocumento.php?nProtocolo=" . ($_POST['nProtocoloHist']);
-                    header("Location: $url");
-                    exit;
-                } else {
-                    // Trate a situação onde o documento não foi encontrado
-                    header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
-                    exit;
-                }
-                break;
-                  
-            //Cadastro documento  
-            case isset($_POST["btnCadastrarDocumentoGestor"]):
-                require_once "../Model/Usuario.php";
-                require_once "../Controller/DocumentoController.php";
-                $documentoController = new DocumentoController();
-                if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
-                    include_once "../View/cadastroRealizado.php";
-                } else {
-                    include_once "../View/cadastroNaoRealizado.php";
-                }
-                break;;
+        //Historico documento
+        case isset($_POST["btnHistoricoDoc"]):
+            require_once "../Model/Movimentacao.php";
             
-            //Cadastro realizado
-            case isset($_POST["btnCadRealizado"]):
-                if($_SESSION['nivel'] == 'Gerente'){
-                    include_once "../View/inicioGestor.php";
-                } elseif ($_SESSION['nivel'] == 'Comum'){
-                    include_once "../View/inicioUsuario.php";
-                }
-                break;
+            $movimentacaoController = new Movimentacao();
+            $results = $movimentacaoController->carregarMovimentacoes($_POST['nProtocoloHist']);
             
-            //Cadastro não realizado
-            case isset($_POST["btnCadNaoRealizado"]):
-                if($_SESSION['nivel'] == 'Gerente'){
-                    include_once "../View/inicioGestor.php";
-                } elseif ($_SESSION['nivel'] == 'Comum'){
-                    include_once "../View/inicioUsuario.php";
-                }
-                break;
-            
-            //Cancelar
-            case isset($_POST["btnCancelar"]):
-                if($_SESSION['nivel'] == 'Gerente'){
-                    include_once "../View/inicioGestor.php";
-                } elseif ($_SESSION['nivel'] == 'Comum'){
-                    include_once "../View/inicioUsuario.php";
-                }
-                break;
-
-            //Deslogar
-            case isset($_POST["btnDeslogar"]):
-                // Encerra a sessão
-                session_destroy();
-
-                header("Location: ../index.php");
+            if ($results) {
+                // Construa a URL de redirecionamento com os parâmetros extraídos
+                $url = "../View/historicoDocumento.php?nProtocolo=" . ($_POST['nProtocoloHist']);
+                header("Location: $url");
                 exit;
-                break;
+            } else {
+                // Trate a situação onde o documento não foi encontrado
+                header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
+                exit;
+            }
+            break;
+                  
+        //Cadastro documento  
+        case isset($_POST["btnCadastrarDocumentoGestor"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+            if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
+                include_once "../View/cadastroRealizado.php";
+            } else {
+                include_once "../View/cadastroNaoRealizado.php";
+            }
+            break;;
+        
+        //Cadastro realizado
+        case isset($_POST["btnCadRealizado"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+        
+        //Cadastro não realizado
+        case isset($_POST["btnCadNaoRealizado"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+        
+        //Alteração realizada
+        case isset($_POST["btnAltRealizada"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+        //Alteração não realizada
+        case isset($_POST["btnAltNaoRealizada"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+        
+        //Cancelar
+        case isset($_POST["btnCancelar"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+        //Deslogar
+        case isset($_POST["btnDeslogar"]):
+            // Encerra a sessão
+            session_destroy();
+
+            header("Location: ../index.php");
+            exit;
+            break;
     }
 ?>

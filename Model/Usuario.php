@@ -77,23 +77,31 @@
                 }
             }
 
-            public function atualizarUsuario(){
-            
+            public function atualizarUsuario() {
                 require_once "ConexaoBD.php";
                 
                 $con = new ConexaoBD();
                 $conn = $con->conectar();
-                if($conn->connect_error){
-                    die("Connection failed: ".$conn->connect_error);
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
                 }
-    
-                $sql = "UPDATE usuario SET nome = '".$this->nome."', email = '".$this->email."', setor ='".$this->setor."', senha = '".$this->senha."', WHERE cpf = '".$this->cpf.";";
+            
+                $sql = "UPDATE usuario SET nome = ?, email = ?, setor = ?, senha = ? WHERE cpf = ?";
+                $stmt = $conn->prepare($sql);
+                if ($stmt === false) {
+                    die("Error preparing statement: " . $conn->error);
+                }
                 
-    
-                if($conn->query($sql) === TRUE){
+                // Bind the parameters to the statement
+                $stmt->bind_param("sssss", $this->nome, $this->email, $this->setor, $this->senha, $this->cpf);
+            
+                // Execute the statement
+                if ($stmt->execute() === TRUE) {
+                    $stmt->close();
                     $conn->close();
                     return TRUE;
-                }else{
+                } else {
+                    $stmt->close();
                     $conn->close();
                     return FALSE;
                 }

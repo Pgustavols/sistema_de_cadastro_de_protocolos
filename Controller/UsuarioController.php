@@ -19,14 +19,14 @@
         return $r;
         }
 
-        public function atualizar($nome, $email, $setor, $nivel,$senha) {
+        public function atualizar($nome, $email, $setor, $senha, $cpf) {
             require_once '../Model/Usuario.php';
             $usuario = new Usuario();
             $usuario->setNome($nome);
             $usuario->setEmail($email);
-            $usuario->setEmail($setor);
-            $usuario->setEmail($nivel);
+            $usuario->setSetor($setor);
             $usuario->setSenha($senha);
+            $usuario->setCPF($cpf);
             $r = $usuario->atualizarUsuario();
             $_SESSION['Usuario'] = serialize($usuario);
             return $r;

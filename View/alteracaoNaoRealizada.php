@@ -64,7 +64,7 @@
 <body>
     <form action="../Controller/Navegacao.php" method="post" class="container m-3 p-4 text-center" style="width: 30%;">
         <div>
-            <button name="btnCadNaoRealizado" class="btn btn-danger rounded fw-bold shadow animated-button">Cadastro não Realizado!</button>
+            <button name="btnAltNaoRealizada" class="btn btn-danger rounded fw-bold shadow animated-button">Alteração não Realizada!</button>
         </div>
     </form>
 </body>
