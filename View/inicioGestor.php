@@ -305,28 +305,6 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="telaHistoricoDocumento" tabindex="-1" aria-labelledby="telaHistoricoDocumentoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="telaHistoricoDocumentoLabel">Histórico do Documento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Nº protocolo</p>
-                    <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Autor</th>
-                            <th>Movimentação</th>
-                            <th>Destino</th>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
         <table class="table table-striped table-hover">
             <thead>
@@ -351,13 +329,13 @@
                 echo '<td class="text-center">'.$row->estado.'</td>';
                 echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloVisualizacaoGestor" value="'.$row->nProtocolo.'">
-                <button name="btnVisualizarDocGestor" class="btn btn-dark">
+                <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
+                <button name="btnVisualizarDoc" class="btn btn-dark">
                 <i class="bi bi-eye"></i></button></form></td>';
                 echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloHistGestor" value="'.$row->nProtocolo.'">
-                <button name="btnHistoricoDocGestor" class="btn btn-dark">
+                <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                <button name="btnHistoricoDoc" class="btn btn-dark">
                 <i class="bi bi-clock-history"></i></button></form></td>';
                 echo '</tr>';
                 }

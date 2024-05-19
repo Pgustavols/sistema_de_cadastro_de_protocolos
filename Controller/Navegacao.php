@@ -79,12 +79,12 @@
             break;
 
             //Visualizar documento
-            case isset($_POST["btnVisualizarDocGestor"]):
+            case isset($_POST["btnVisualizarDoc"]):
                 require_once "../Controller/DocumentoController.php";
                 require_once "../Model/Documento.php";
                 
                 $documentoController = new Documento();
-                $results = $documentoController->visualizarDocumento($_POST['nProtocoloVisualizacaoGestor']);
+                $results = $documentoController->visualizarDocumento($_POST['nProtocoloVisualizacao']);
                 
                 if ($results) {
                     // Construa a URL de redirecionamento com os parâmetros extraídos
@@ -95,6 +95,25 @@
                            "&data_de_cadastro=" . urlencode($results['data_de_cadastro']) .
                            "&tipo=" . urlencode($results['tipo']) .
                            "&titulo=" . urlencode($results['titulo']);
+                    header("Location: $url");
+                    exit;
+                } else {
+                    // Trate a situação onde o documento não foi encontrado
+                    header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
+                    exit;
+                }
+                break;
+
+            //Historico documento
+            case isset($_POST["btnHistoricoDoc"]):
+                require_once "../Model/Movimentacao.php";
+                
+                $movimentacaoController = new Movimentacao();
+                $results = $movimentacaoController->carregarMovimentacoes($_POST['nProtocoloHist']);
+                
+                if ($results) {
+                    // Construa a URL de redirecionamento com os parâmetros extraídos
+                    $url = "../View/historicoDocumento.php?nProtocolo=" . ($_POST['nProtocoloHist']);
                     header("Location: $url");
                     exit;
                 } else {

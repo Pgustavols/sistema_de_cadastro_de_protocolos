@@ -38,3 +38,29 @@ FROM
     documento d
 INNER JOIN 
     usuario p ON d.cpf_possuidor = p.cpf
+INNER JOIN
+    usuario u ON d.cpf_destinatario = u.cpf;
+
+
+--View para historico de documento
+USE `sistema_de_protocolo`;
+CREATE  OR REPLACE VIEW `view_movimentacao_detalhada` AS
+SELECT
+	m.ID,
+    m.nProtocolo,
+    t.titulo AS titulo,
+    m.estado,
+    m.cpf_destinatario,
+    d.nome AS nome_destinatario,
+    m.data_da_acao,
+    m.cpf_remetente,
+    r.nome AS nome_remetente
+FROM movimentacao m
+INNER JOIN 
+	usuario d ON m.cpf_destinatario = d.cpf
+INNER JOIN 
+	usuario r ON m.cpf_remetente = r.cpf
+INNER JOIN
+	documento t ON m.nProtocolo = t.nProtocolo;
+    
+

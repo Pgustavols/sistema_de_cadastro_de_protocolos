@@ -55,6 +55,21 @@
         public function getRemetente(){
             return $this->remetente;
         }
-   
+
+        public function carregarMovimentacoes($nProtocolo){
+            require_once "ConexaoBD.php";
+
+            $con = new ConexaoBD();
+            $conn = $con->conectar();
+
+            if($conn->connect_error){
+                die("Connection failed: ".$conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM view_movimentacao_detalhada WHERE nProtocolo = $nProtocolo";
+            $re = $conn->query($sql);
+                $conn->close();
+                return $re;
+        }
     }
 ?>
