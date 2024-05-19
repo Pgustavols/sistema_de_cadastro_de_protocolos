@@ -16,7 +16,7 @@
 
     </style>
 </head>
-<body style="background-color: #F2F2F2;">
+<body style="background-color: #F2F2F2;" class="font-padrao">
 <?php
     include_once '../Controller/DocumentoController.php';
     include_once '../Controller/UsuarioController.php';
@@ -49,11 +49,12 @@
 ?>
 <header class="container-fluid bg-dark shadow p-4">
     <h1 class="font-padrao text-white ">Olá, seja bem vindo(a) <?php echo $_SESSION['nome'];?></h1>
+    <form action="" method="post"><button name="btnDeslogar" class="btn btn-danger position-absolute top-0 end-0 m-4"><i class="bi bi-box-arrow-right"></i></button></form>
 </header>
 <main class="container-fluid p-3">
     <div class="my-3 p-3 m-auto font-padrao row justify-content-between">
         <div class="col-7">
-            <form action="" class="input-group mb-3 h-100">
+            <form action="../Controller/Navegacao.php" class="input-group mb-3 h-100">
                 <input type="number" class="form-control" id="pesquisa" name="pesquisa" placeholder="Pesquisar por Nº de Protocolo">
                 <button class="btn btn-dark" id="btnPesquisar" name="btnPesquisar"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -100,12 +101,12 @@
                 <div class="modal-body">
                     <table class="table table-striped table-hover rounded-3 shadow">
                         <thead>
-                            <th>Nº Protocolo</th>
-                            <th>Título</th>
-                            <th>Enviado por</th>
-                            <th>Data de Envio</th>
-                            <th>Confirmar</th>
-                            <th>Recusar</th>
+                            <th class="text-center">Nº Protocolo</th>
+                            <th class="text-center">Título</th>
+                            <th class="text-center">Enviado por</th>
+                            <th class="text-center">Data de Envio</th>
+                            <th class="text-center">Confirmar</th>
+                            <th class="text-center">Recusar</th>
                         </thead>
                         <?php
                     $dCon = new DocumentoController();
@@ -113,21 +114,19 @@
                     if($results != null)
                     while($row = $results->fetch_object()) {
                     echo '<tr>';
-                    echo '<td>'.$row->nProtocolo.'</td>';
-                    echo '<td>'.$row->titulo.'</td>';
-                    echo '<td>'.$row->nome.'</td>';
-                    echo '<td>'.date('d/m/Y', strtotime($row->data_da_acao)).'</td>';
-                    echo '<td>
+                    echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                    echo '<td class="text-center">'.$row->titulo.'</td>';
+                    echo '<td class="text-center">'.$row->nome.'</td>';
+                    echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_da_acao)).'</td>';
+                    echo '<td class="text-center">
                     <form action="../Controller/Navegacao.php" method="post">
                         <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
-                        <button name="btnConfirmarDocumento" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
+                        <button name="btnConfirmarDocumento" class="btn btn-success">
                         <i class="bi bi-check"></i></button></td>';
-                        echo '<td>
+                    echo '<td class="text-center">
                         <form action="../Controller/Navegacao.php" method="post">
                         <input type="hidden" name="nProtocoloRecusar" value="'.$row->nProtocolo.'">
-                        <button name="btnRecusarDocumento" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
+                        <button name="btnRecusarDocumento" class="btn btn-danger">
                         <i class="bi bi-x"></i></button></td>
                     </form>';
                     echo '</tr>';
@@ -201,8 +200,8 @@
                             <label for="txtSetor" class="form-label">Setor Destinatário</label>
                             <input class="form-control" id="txtSetor" name="txtSetor" placeholder="" disabled>
                         </div>
-                        <button class="col-5 btn btn-danger my-3">Cancelar</button>
-                        <button class="col-5 btn btn-dark my-3" name="btnCadastrarDocumentoGestor">Cadastrar</button>
+                        <button name="btnCancelar" class="col-5 btn btn-danger my-3">Cancelar</button>
+                        <button name="btnCadastrarDocumentoGestor" class="col-5 btn btn-dark my-3">Cadastrar</button>
                     </form>
                 </div>
             </div>
@@ -262,9 +261,6 @@
     <div class="modal fade" id="telaNovoFuncionario" tabindex="-1" aria-labelledby="telaNovoFuncionarioLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-            <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
                 <div class="modal-body row align-items-center p-4">
                     <div class="col-6 text-center">
                         <img src="../Img/Logo.png" alt="Logo" class="figure-img img-fluid rounded">
@@ -299,6 +295,7 @@
                                     <span id="senha-error" class="error"></span>
                                 </div>
                             <button name="btnCadastrarUser" class="btn btn-dark">Cadastrar</button>
+                            <button name="btnCancelar" class="btn btn-danger">Cancelar</button>
                         </form>
                         </div>
                 </div>
@@ -350,7 +347,6 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
 </script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const destinatarios = <?php echo json_encode($destinatarios_js); ?>;

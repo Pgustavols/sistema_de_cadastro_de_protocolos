@@ -129,28 +129,46 @@
                 require_once "../Controller/DocumentoController.php";
                 $documentoController = new DocumentoController();
                 if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
-                    echo "<script>
-                    alert('Documento Cadastrado');
-                    window.history.back();
-                    </script>";
-                    include_once "../View/inicioGestor.php";
-                }else {
-                    echo "<script>
-                    alert('Documento Não Cadastrado');
-                    window.history.back();
-                    </script>";
-                    include_once "../View/inicioGestor.php";
+                    include_once "../View/cadastroRealizado.php";
+                } else {
+                    include_once "../View/cadastroNaoRealizado.php";
                 }
                 break;;
             
             //Cadastro realizado
             case isset($_POST["btnCadRealizado"]):
-                include_once "../View/inicioGestor.php";
+                if($_SESSION['nivel'] == 'Gerente'){
+                    include_once "../View/inicioGestor.php";
+                } elseif ($_SESSION['nivel'] == 'Usuário'){
+                    include_once "../View/inicioUsuario.php";
+                }
                 break;
             
             //Cadastro não realizado
             case isset($_POST["btnCadNaoRealizado"]):
-                include_once "../View/inicioGestor.php";
+                if($_SESSION['nivel'] == 'Gerente'){
+                    include_once "../View/inicioGestor.php";
+                } elseif ($_SESSION['nivel'] == 'Usuário'){
+                    include_once "../View/inicioUsuario.php";
+                }
+                break;
+            
+            //Cancelar
+            case isset($_POST["btnCancelar"]):
+                if($_SESSION['nivel'] == 'Gerente'){
+                    include_once "../View/inicioGestor.php";
+                } elseif ($_SESSION['nivel'] == 'Usuário'){
+                    include_once "../View/inicioUsuario.php";
+                }
+                break;
+
+            //Deslogar
+            case isset($_POST["btnDeslogar"]):
+                // Encerra a sessão
+                session_destroy();
+
+                header("Location: ../index.php");
+                exit;
                 break;
     }
 ?>
