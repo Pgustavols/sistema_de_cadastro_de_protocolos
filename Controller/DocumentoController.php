@@ -42,5 +42,12 @@
             $r = $documento->escreverDocumento($cpf_possuidor, $cpf_destinatario, $tipo, $titulo);
             return $r;
         }
+        
+        public function visualizarDocumento($nProtocolo){
+            require_once "../Model/Documento.php";
+            $documento = new Documento();
+            $r = $documento->visualizarDocumento($nProtocolo);
+            return $r;
+        }
     }
 ?>

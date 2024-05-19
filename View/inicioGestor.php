@@ -48,7 +48,7 @@
     
 ?>
 <header class="container-fluid bg-dark shadow p-4">
-    <h1 class="font-padrao text-white ">Olá, seja bem vindo(a)</h1>
+    <h1 class="font-padrao text-white ">Olá, seja bem vindo(a) <?php echo $_SESSION['nome'];?></h1>
 </header>
 <main class="container-fluid p-3">
     <div class="my-3 p-3 m-auto font-padrao row justify-content-between">
@@ -116,7 +116,7 @@
                     echo '<td>'.$row->nProtocolo.'</td>';
                     echo '<td>'.$row->titulo.'</td>';
                     echo '<td>'.$row->nome.'</td>';
-                    echo '<td>'.$row->data_da_acao.'</td>';
+                    echo '<td>'.date('d/m/Y', strtotime($row->data_da_acao)).'</td>';
                     echo '<td>
                     <form action="../Controller/Navegacao.php" method="post">
                         <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
@@ -147,9 +147,9 @@
                 </div>
                 <div class="modal-body">
                     <form action="" method="POST" class="row g-3 justify-content-between">
-                    <div class="col-2 my-3">
-                    <label for="txtProtocolo" class="form-label">Nº Protocolo</label>
-<input type="number" class="form-control" id="txtProtocolo" name="txtProtocolo" placeholder="<?php echo htmlspecialchars($protocolo); ?>" disabled>
+                        <div class="col-2 my-3">
+                            <label for="txtProtocolo" class="form-label">Nº Protocolo</label>
+                            <input type="number" class="form-control" id="txtProtocolo" name="txtProtocolo" placeholder="<?php echo htmlspecialchars($protocolo); ?>" disabled>
                         </div>
                         <div class="col-10 my-3">
                             <label for="txtTitulo" class="form-label">Título</label>
@@ -347,7 +347,7 @@
                 echo '<td class="text-center">'.$row->nProtocolo.'</td>';
                 echo '<td class="text-center">'.$row->titulo.'</td>';
                 echo '<td class="text-center">'.$row->nome.'</td>';
-                echo '<td class="text-center">'.$row->data_de_cadastro.'</td>';
+                echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_de_cadastro)).'</td>';
                 echo '<td class="text-center">'.$row->estado.'</td>';
                 echo '<td class="text-center">
                 <form action="../Controller/Navegacao.php" method="post">

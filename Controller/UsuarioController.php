@@ -37,14 +37,21 @@
             $usuario->carregarUsuario($cpf);
             $verSenha=$usuario->getSenha();
             $verNivel=$usuario->getNivel();
+            $verNome=$usuario->getNome();
             if($senha == $verSenha){
                 $_SESSION['Usuario'] = serialize($usuario);
                 if($verNivel == "Gerente"){
-                    $nivel = 1;
-                return $nivel;//Gerente
+                    return array(
+                        'cpf' => $cpf,
+                        'nome' => $verNome,
+                        'nivel' => $verNivel
+                    );
                 }elseif($verNivel == "Comum"){
-                    $nivel = 2;
-                return $nivel;//Comum
+                    return array(
+                        'cpf' => $cpf,
+                        'nome' => $verNome,
+                        'nivel' => $verNivel
+                    );
                 }
             }
             return false;

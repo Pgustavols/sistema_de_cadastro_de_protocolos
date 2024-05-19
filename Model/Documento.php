@@ -284,10 +284,23 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
                 
-                $sql = "SELECT * FROM documento WHERE nProtocolo = '$nProtocolo'";
-                $re = $conn->query($sql);
-                $conn->close();
-                return $re;
+                $sql = "SELECT * FROM view_documentos_detalhados WHERE nProtocolo = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $nProtocolo);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc(); // Extrai os dados como um array associativo
+                    $stmt->close();
+                    $conn->close();
+                    return $row;
+                } else {
+                    $stmt->close();
+                    $conn->close();
+                    return false;
+                }
+        
             }
 
             public function pegaNumeroProtocolo(){

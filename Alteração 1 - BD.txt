@@ -19,3 +19,22 @@ delimiter //
 		end if;
     end ;
 // delimiter ;
+
+--View para visualização de documento
+USE `sistema_de_protocolo`;
+CREATE  OR REPLACE VIEW view_documentos_detalhados AS
+SELECT 
+    d.nProtocolo,
+    d.cpf_possuidor,
+    p.nome AS nome_possuidor,
+    d.cpf_destinatario,
+    u.nome AS nome_destinatario,
+    u.setor AS setor_destinatario,
+    d.data_de_cadastro,
+    d.tipo,
+    d.titulo,
+    d.estado
+FROM 
+    documento d
+INNER JOIN 
+    usuario p ON d.cpf_possuidor = p.cpf
