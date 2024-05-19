@@ -35,11 +35,11 @@
             $r = $documento->documentosPendente($cpf_destinatario);
             return $r;
         }
-        
-        public function visualizarDocumento($nProtocolo){
+
+        public function cadastrarDocumento($cpf_possuidor, $cpf_destinatario, $tipo, $titulo){
             require_once "../Model/Documento.php";
             $documento = new Documento();
-            $r = $documento->visualizarDocumento($nProtocolo);
+            $r = $documento->escreverDocumento($cpf_possuidor, $cpf_destinatario, $tipo, $titulo);
             return $r;
         }
     }
