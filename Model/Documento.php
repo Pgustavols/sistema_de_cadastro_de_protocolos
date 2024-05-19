@@ -285,5 +285,30 @@
                 return $re;
             }
 
+            public function pegaNumeroProtocolo(){
+                require_once "ConexaoBD.php";
+            
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+            
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+            
+                $sql = "SELECT max(nProtocolo) + 1 as nextProtocolo from documento";
+                $re = $conn->query($sql);
+            
+                if ($re->num_rows > 0) {
+                    $row = $re->fetch_assoc();
+                    $nextProtocolo = $row['nextProtocolo'];
+                } else {
+                    $nextProtocolo = 1; // Se não houver registros, iniciar com 1
+                }
+            
+                $conn->close();
+                return $nextProtocolo;
+            }
+
+
     }
 ?>
