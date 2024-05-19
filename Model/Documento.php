@@ -113,7 +113,7 @@
 
 
 
-            public function receberDocumento(){
+            public function receberDocumento($protocolo, $cpf_destinatario){
                 require_once "ConexaoBD.php";
 
                 $con = new ConexaoBD();
@@ -122,7 +122,11 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE documento SET cpf_possuidor = '".$this->cpf_possuidor."', estado ='"."Recebido"."'WHERE nProtocolo = '".$this->nProtocolo.'";"';
+                // $sql = "UPDATE documento SET cpf_possuidor = '".$cpf_destinatario."', estado ='"."Recebido"."'WHERE nProtocolo = '".$protocolo.'";"';
+
+                $sql = "UPDATE documento 
+                SET cpf_possuidor = '" . $cpf_destinatario . "', estado = 'Recebido' 
+                WHERE nProtocolo = '" . $protocolo . "'";
                
                 if($conn->query($sql) === TRUE){
                     $conn->close();
