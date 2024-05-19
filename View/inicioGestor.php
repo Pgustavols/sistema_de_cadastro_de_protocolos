@@ -21,10 +21,31 @@
     include_once '../Controller/DocumentoController.php';
     include_once '../Controller/UsuarioController.php';
     include_once '../Model/Usuario.php';
+   
+
+    
     if(!isset($_SESSION))
         {
         session_start();
         }
+
+        require_once '../Model/Documento.php';
+        $documento = new Documento();
+        $protocolo = $documento->pegaNumeroProtocolo();
+
+        require_once '../Model/Usuario.php';
+
+        $cpf_logado = unserialize($_SESSION['Usuario'])->getCPF(); // O CPF do usuário logado deve ser definido aqui
+        $usuario = new Usuario();
+        $destinatarios = $usuario->listaDestinatarios($cpf_logado);
+
+        $destinatarios_js = array();
+        foreach ($destinatarios as $destinatario) {
+            $cpf_da_option = $destinatario['cpf'];
+            $setorDestinatario = $usuario->listaSetorDestinatario($cpf_da_option);
+            $destinatarios_js[] = array('cpf' => $cpf_da_option, 'nome' => $destinatario['nome'], 'setor' => $setorDestinatario);
+    }
+    
 ?>
 <header class="container-fluid bg-dark shadow p-4">
     <h1 class="font-padrao text-white ">Olá, seja bem vindo(a)</h1>
@@ -77,42 +98,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
-                        <table class="table table-striped table-hover rounded-3 shadow">
-                            <thead>
-                                <th class="text-center">Nº Protocolo</th>
-                                <th class="text-center">Título</th>
-                                <th class="text-center">Enviado por</th>
-                                <th class="text-center">Data de Envio</th>
-                                <th class="text-center">Confirmar</th>
-                                <th class="text-center">Recusar</th>
-                            </thead>
-                            <?php
-                        $dCon = new DocumentoController();
-                        $results = $dCon->telaPendentes(unserialize($_SESSION['Usuario'])->getCPF());
-                        if($results != null)
-                        while($row = $results->fetch_object()) {
-                        echo '<tr>';
-                        echo '<td class="text-center">'.$row->nProtocolo.'</td>';
-                        echo '<td class="text-center">'.$row->titulo.'</td>';
-                        echo '<td class="text-center">'.$row->nome.'</td>';
-                        echo '<td class="text-center">'.$row->data_da_acao.'</td>';
-                        echo '<td class="text-center">
+                    <table class="table table-striped table-hover rounded-3 shadow">
+                        <thead>
+                            <th>Nº Protocolo</th>
+                            <th>Título</th>
+                            <th>Enviado por</th>
+                            <th>Data de Envio</th>
+                            <th>Confirmar</th>
+                            <th>Recusar</th>
+                        </thead>
+                        <?php
+                    $dCon = new DocumentoController();
+                    $results = $dCon->telaPendentes(unserialize($_SESSION['Usuario'])->getCPF());
+                    if($results != null)
+                    while($row = $results->fetch_object()) {
+                    echo '<tr>';
+                    echo '<td>'.$row->nProtocolo.'</td>';
+                    echo '<td>'.$row->titulo.'</td>';
+                    echo '<td>'.$row->nome.'</td>';
+                    echo '<td>'.$row->data_da_acao.'</td>';
+                    echo '<td>
+                    <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
+                        <button name="btnConfirmarDocumento" class="w3-button w3-block w3-blue
+                        w3-cell w3-round-large">
+                        <i class="bi bi-check"></i></button></td>';
+                        echo '<td>
                         <form action="../Controller/Navegacao.php" method="post">
-                            <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
-                            <button name="btnConfirmarDocumento"  class="btn btn-success"">
-                            <i class="bi bi-check"></i></button></td>';
-                            echo '<td  class="text-center">
-                            <form action="../Controller/Navegacao.php" method="post">
-                            <input type="hidden" name="nProtocoloRecusar" value="'.$row->nProtocolo.'">
-                            <button name="btnRecusarDocumento" class="btn btn-danger">
-                            <i class="bi bi-x"></i></button></td>
-                        </form>';
-                        echo '</tr>';
-                        }
-                        ?>
-                        </table>
-                    </div>
+                        <input type="hidden" name="nProtocoloRecusar" value="'.$row->nProtocolo.'">
+                        <button name="btnRecusarDocumento" class="w3-button w3-block w3-blue
+                        w3-cell w3-round-large">
+                        <i class="bi bi-x"></i></button></td>
+                    </form>';
+                    echo '</tr>';
+                    }
+                    ?>
+                    </table>
                 </div>
             </div>
         </div>
@@ -127,8 +148,8 @@
                 <div class="modal-body">
                     <form action="" method="POST" class="row g-3 justify-content-between">
                     <div class="col-2 my-3">
-                            <label for="txtProtocolo" class="form-label">Nº Protocolo</label>
-                            <input type="number" class="form-control" id="txtProtocolo" name="txtProtocolo" disabled>
+                    <label for="txtProtocolo" class="form-label">Nº Protocolo</label>
+<input type="number" class="form-control" id="txtProtocolo" name="txtProtocolo" placeholder="<?php echo htmlspecialchars($protocolo); ?>" disabled>
                         </div>
                         <div class="col-10 my-3">
                             <label for="txtTitulo" class="form-label">Título</label>
@@ -152,27 +173,36 @@
                             dataInput.value = dataFormatada;
                         </script>
                         <div class="col-6 my-3">
-                            <label for="txtPossuidor" class="form-label">Possuidor</label>
-                            <input type="text" class="form-control" id="txtPossuidor" name="txtPossuidor" disabled>
+                        <label for="txtPossuidor" class="form-label">Possuidor</label>
+                        <input type="text" class="form-control" id="txtPossuidor" name="txtPossuidor" placeholder="Eu" disabled>
                         </div>
                         <div class="col-3 my-3">
                             <label for="txtTipo" class="form-label">Tipo Documento</label>
                             <select class="form-select" id="txtTipo" name="txtTipo">
-                                <option value="Requerimento">Requerimento</option>
-                                <option value="Pedido de Compra">Pedido de Compra</option>
-                                <option value="Ata">Ata</option>
-                                <option value="Relatório">Relatório</option>
+                                <option value="1">Requerimento</option>
+                                <option value="2">Pedido de Compra</option>
+                                <option value="3">Ata</option>
+                                <option value="4">Relatório</option>
                             </select>
                         </div>
                         <div class="col-8 my-3">
-                            <label for="txtDestinatario" class="form-label">Destinatário</label>
-                            <select class="form-select" id="txtDestinatario" name="txtDestinatario">
-                                
-                            </select>
+                        <label for="txtDestinatario" class="form-label">Destinatário</label>
+
+                        <select class="form-select" id="txtDestinatario" name="txtDestinatario">
+                            <?php foreach ($destinatarios as $destinatario): ?>
+                                <option value="<?php echo htmlspecialchars($destinatario['cpf']);
+                                    $usuario2 = new Usuario();
+                                    $cpf_da_option = htmlspecialchars($destinatario['cpf']);
+                                    $setorDestinatario = $usuario2->listaSetorDestinatario($cpf_da_option); 
+                                ?>">
+                                    <?php echo htmlspecialchars($destinatario['nome']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                         </div>
                         <div class="col-4 my-3">
                             <label for="txtSetor" class="form-label">Setor Destinatário</label>
-                            <input class="form-control" id="txtSetor" name="txtSetor" disabled>
+                            <input class="form-control" id="txtSetor" name="txtSetor" placeholder="<?php echo htmlspecialchars($setorDestinatario); ?>" disabled>
                         </div>
                         <button class="col-5 btn btn-danger my-3">Cancelar</button>
                         <button class="col-5 btn btn-dark my-3">Cadastrar</button>
@@ -196,39 +226,38 @@
                     </svg>
                 </button>
                 <br>
-                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
-                        <table class="table table-striped table-hover rounded-3 shadow">
-                            <thead class="table-dark">
-                                <th class="text-center">Nome</th>
-                                <th class="text-center">Setor</th>
-                                <th class="text-center">Nível</th>
-                                <th class="text-center">Editar</th>
-                                <th class="text-center">Desativar</th>
-                            </thead>
-                            <?php
-                        $dCon = new UsuarioController();
-                        $results = $dCon->listaGestaoUsuarios();
-                        if($results != null)
-                        while($row = $results->fetch_object()) {
-                        echo '<tr>';
-                        echo '<td class="text-center">'.$row->nome.'</td>';
-                        echo '<td class="text-center">'.$row->setor.'</td>';
-                        echo '<td class="text-center">'.$row->nivel.'</td>';
+                    <table class="table table-striped table-hover rounded-3 shadow">
+                        <thead>
+                            <th class="text-center">Nome</th>
+                            <th class="text-center">Setor</th>
+                            <th class="text-center">Nível</th>
+                            <th class="text-center">Editar</th>
+                            <th class="text-center">Desativar</th>
+                        </thead>
+                        <?php
+                    $dCon = new UsuarioController();
+                    $results = $dCon->listaGestaoUsuarios();
+                    if($results != null)
+                    while($row = $results->fetch_object()) {
+                    echo '<tr>';
+                    echo '<td class="text-center">'.$row->nome.'</td>';
+                    echo '<td class="text-center">'.$row->setor.'</td>';
+                    echo '<td class="text-center">'.$row->nivel.'</td>';
+                    echo '<td>
+                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                        <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
+                        <button name="btnEditarUsuario" class="text-center btn btn-primary">
+                        <i class="bi bi-pencil"></i></button></form></td>';
                         echo '<td>
-                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
-                            <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
-                            <button name="btnEditarUsuario" class="text-center btn btn-primary">
-                            <i class="bi bi-pencil"></i></button></form></td>';
-                            echo '<td>
-                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
-                            <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
-                            <button name="btnDesativarUsuario" class="text-center btn btn-danger">
-                            <i class="bi bi-person-fill-x"></i></button></form></td>';
-                        echo '</tr>';
-                        }
-                        ?>
-                        </table>
-                    </div>
+                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                        <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
+                        <button name="btnDesativarUsuario" class="text-center btn btn-danger">
+                        <i class="bi bi-person-fill-x"></i></button></form></td>';
+                    echo '</tr>';
+                    }
+            ?>
+
+                    </table>
                 </div>
             </div>
         </div>
@@ -279,9 +308,31 @@
             </div>
         </div>
     </div>
-    <div class="mx-4 p-3 font-padrao rounded-3 shadow table-responsive" style="background-color: white; max-height: 400px; overflow-y:auto;">
+    <div class="modal fade" id="telaHistoricoDocumento" tabindex="-1" aria-labelledby="telaHistoricoDocumentoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="telaHistoricoDocumentoLabel">Histórico do Documento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Nº protocolo</p>
+                    <table class="table table-striped table-hover rounded-3 shadow">
+                        <thead>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Autor</th>
+                            <th>Movimentação</th>
+                            <th>Destino</th>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
         <table class="table table-striped table-hover">
-            <thead class="table-dark">
+            <thead>
                 <th class="text-center">Nº Protocolo</th>
                 <th class="text-center">Título</th>
                 <th class="text-center">Possuidor</th>
@@ -324,5 +375,23 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const destinatarios = <?php echo json_encode($destinatarios_js); ?>;
+        const destinatarioSelect = document.getElementById('txtDestinatario');
+        const setorInput = document.getElementById('txtSetor');
+
+        destinatarioSelect.addEventListener('change', function() {
+            const selectedCpf = destinatarioSelect.value;
+            const selectedDestinatario = destinatarios.find(dest => dest.cpf === selectedCpf);
+            setorInput.placeholder = selectedDestinatario ? selectedDestinatario.setor : '';
+        });
+
+        // Trigger change event on page load to set the initial value
+        destinatarioSelect.dispatchEvent(new Event('change'));
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
