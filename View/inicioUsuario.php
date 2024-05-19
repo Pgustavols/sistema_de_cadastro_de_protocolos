@@ -192,41 +192,43 @@
             </div>
         </div>
     </div>
-    <div class="mx-4 p-3 font-padrao rounded-3 shadow table-responsive" style="max-height: 400px; background-color: white;">
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <th class="text-center">Nº Protocolo</th>
-                <th class="text-center">Título</th>
-                <th class="text-center">Data de cadastro</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Visualizar</th>
-                <th class="text-center">Histórico</th>
-            </thead>
-            <?php
-                $dCon = new DocumentoController();
-                $results = $dCon->telaInicialComum(unserialize($_SESSION['Usuario'])->getCPF());
-                if($results != null)
-                while($row = $results->fetch_object()) {
-                echo '<tr>';
-                echo '<td class="text-center">'.$row->nProtocolo.'</td>';
-                echo '<td class="text-center">'.$row->titulo.'</td>';
-                echo '<td class="text-center">'.$row->data_de_cadastro.'</td>';
-                echo '<td class="text-center">'.$row->estado.'</td>';
-                echo '<td class="text-center">
-                <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
-                <button name="btnVisualizarDoc" class="btn btn-dark">
-                <i class="bi bi-eye"></i></button></td>';
-                echo '<td class="text-center">
-                <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
-                <button name="btnHistoricoDoc" class="btn btn-dark">
-                <i class="bi bi-clock-history"></i></button></td>
-                </form>';
-                echo '</tr>';
-                }
-            ?>
-        </table>
+    <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
+        <div class="table-responsive" style="max-height: 350px;">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <th class="text-center">Nº Protocolo</th>
+                    <th class="text-center">Título</th>
+                    <th class="text-center">Data de cadastro</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Visualizar</th>
+                    <th class="text-center">Histórico</th>
+                </thead>
+                <?php
+                    $dCon = new DocumentoController();
+                    $results = $dCon->telaInicialComum(unserialize($_SESSION['Usuario'])->getCPF());
+                    if($results != null)
+                    while($row = $results->fetch_object()) {
+                    echo '<tr>';
+                    echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                    echo '<td class="text-center">'.$row->titulo.'</td>';
+                    echo '<td class="text-center">'.$row->data_de_cadastro.'</td>';
+                    echo '<td class="text-center">'.$row->estado.'</td>';
+                    echo '<td class="text-center">
+                    <form action="../Controller/Navegacao.php" method="post">
+                    <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
+                    <button name="btnVisualizarDoc" class="btn btn-dark">
+                    <i class="bi bi-eye"></i></button></td>';
+                    echo '<td class="text-center">
+                    <form action="../Controller/Navegacao.php" method="post">
+                    <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                    <button name="btnHistoricoDoc" class="btn btn-dark">
+                    <i class="bi bi-clock-history"></i></button></td>
+                    </form>';
+                    echo '</tr>';
+                    }
+                ?>
+            </table>
+        </div>
     </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

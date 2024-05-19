@@ -29,16 +29,42 @@
         }
 
         .animated-button:active {
-            background-color: #D40000;
+            background-color: #A90000;
             transform: scale(1);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .entrada {
+        width: 300px;
+        height: 150px;
+        background-color: #D40000;
+        animation: slideIn 1s; /* Nome da animação e duração */
+        }
+
+        /* Definição da animação */
+        @keyframes slideIn {
+            0%{
+                width: 200px;
+                height: 100px;
+                background-color: white;
+            }
+            50% {
+                width: 350px;
+                height: 175px;
+                background-color: #D40000;
+            }
+            100% {
+                width: 300px;
+                height: 150px;
+                background-color: #D40000;
+            }
         }
     </style>
 </head>
 <body>
-    <form action="../Controller/Navegacao.php" method="post" class="container container-alinhado card bg-light m-3 p-4 rounded text-center" style="width: 30%;">
+    <form action="../Controller/Navegacao.php" method="post" class="container m-3 p-4 text-center" style="width: 30%;">
         <div>
-            <button name="btnCadNaoRealizado" class="btn btn-danger rounded fw-bold shadow animated-button" style="width: 90%;">Cadastro Realizado com sucesso!</button>
+            <button name="btnCadNaoRealizado" class="btn btn-danger rounded fw-bold shadow animated-button">Cadastro Realizado com sucesso!</button>
         </div>
     </form>
 </body>
