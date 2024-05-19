@@ -77,6 +77,32 @@
                             <th>Confirmar</th>
                             <th>Recusar</th>
                         </thead>
+                        <?php
+                    $dCon = new DocumentoController();
+                    $results = $dCon->telaPendentes(unserialize($_SESSION['Usuario'])->getCPF());
+                    if($results != null)
+                    while($row = $results->fetch_object()) {
+                    echo '<tr>';
+                    echo '<td>'.$row->nProtocolo.'</td>';
+                    echo '<td>'.$row->titulo.'</td>';
+                    echo '<td>'.$row->nome.'</td>';
+                    echo '<td>'.$row->data_da_acao.'</td>';
+                    echo '<td>
+                    <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloConfirmarComum" value="'.$row->nProtocolo.'">
+                        <button name="btnConfirmarDocumentoComum" class="w3-button w3-block w3-blue
+                        w3-cell w3-round-large">
+                        <i class="bi bi-check"></i></button></td>';
+                        echo '<td>
+                        <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloRecusarComum" value="'.$row->nProtocolo.'">
+                        <button name="btnRecusarDocumento" class="w3-button w3-block w3-blue
+                        w3-cell w3-round-large">
+                        <i class="bi bi-x"></i></button></td>
+                    </form>';
+                    echo '</tr>';
+                    }
+                    ?>
                     </table>
                 </div>
             </div>
@@ -190,14 +216,14 @@
                 echo '<td>'.$row->estado.'</td>';
                 echo '<td>
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloExc" value="'.$row->nProtocolo.'">
-                <button name="btnVisualizarDocGestor" class="w3-button w3-block w3-blue
+                <input type="hidden" name="nProtocoloVisualizacaoComum" value="'.$row->nProtocolo.'">
+                <button name="btnVisualizarDocComum" class="w3-button w3-block w3-blue
                 w3-cell w3-round-large">
                 <i class="bi bi-eye"></i></button></td>';
                 echo '<td>
                 <form action="../Controller/Navegacao.php" method="post">
-                <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
-                <button name="btnHistoricoDocGestor" class="w3-button w3-block w3-blue
+                <input type="hidden" name="nProtocoloHistComum" value="'.$row->nProtocolo.'">
+                <button name="btnHistoricoDocComum" class="w3-button w3-block w3-blue
                 w3-cell w3-round-large">
                 <i class="bi bi-clock-history"></i></button></td>
                 </form>';
