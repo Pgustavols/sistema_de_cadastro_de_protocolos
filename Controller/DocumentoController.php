@@ -15,10 +15,10 @@
             return $r;
         }
 
-        public function telaInicialdocumento(){
+        public function telaInicialdocumento($cpf_possuidor, $cpf_destinatario){
             require_once '../Model/Documento.php';
             $documento = new Documento();
-            $r = $documento->carregarDocumentosNaTelaInicialGestor();
+            $r = $documento->carregarDocumentosNaTelaInicialGestor($cpf_possuidor, $cpf_destinatario);
             return $r;
         }
 
