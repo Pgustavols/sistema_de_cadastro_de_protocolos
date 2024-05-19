@@ -57,8 +57,18 @@
                 include_once "../View/cadastroNaoRealizado.php";
             }
             break;
-            
-        //Confirmação documento
+
+        //Cadastro realizado
+        case isset($_POST["btnCadRealizado"]):
+            include_once "../View/inicioGestor.php";
+            break;
+        
+        //Cadastro não realizado
+        case isset($_POST["btnCadNaoRealizado"]):
+            include_once "../View/inicioGestor.php";
+            break;
+
+
         case isset($_POST["btnConfirmarDocumentoComum"]):
             require_once "../Model/Usuario.php";
             require_once "../Controller/DocumentoController.php";
@@ -74,20 +84,16 @@
             }
             break;
 
-        //Visualizar Documento
-        case isset($_POST["btnVisualizarDocGestor"]):
-            require_once "../Controller/DocumentoController.php";
-            require_once "../Model/Documento.php";
-
-            $nProtocolo = $_POST['nProtocoloVisualizacaoGestor'];
-            header("Location: ../View/visualizarDocumento.php?nProtocolo=$nProtocolo");
-            exit;
-            break;
-
-                 
-
-
-
+            case isset($_POST["btnVisualizarDocGestor"]):
+                require_once "../Controller/DocumentoController.php";
+                require_once "../Model/Documento.php";
+    
+                $nProtocolo = $_POST['nProtocoloVisualizacaoGestor'];
+                header("Location: ../View/visualizarDocumento.php?nProtocolo=$nProtocolo");
+                exit;
+                break;
+    
+    
 
             //Cadastro realizado
             case isset($_POST["btnCadRealizado"]):
@@ -98,5 +104,26 @@
             case isset($_POST["btnCadNaoRealizado"]):
                 include_once "../View/inicioGestor.php";
                 break;
-        }
-        ?>
+        
+
+
+        case isset($_POST["btnCadastrarDocumentoGestor"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+            if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
+                echo "<script>
+                alert('Documento Cadastrado');
+                window.history.back();
+                </script>";
+                include_once "../View/inicioGestor.php";
+            }else {
+                echo "<script>
+                alert('Documento Não Cadastrado');
+                window.history.back();
+                </script>";
+                include_once "../View/inicioGestor.php";
+            }
+            break;;
+    }
+?>
