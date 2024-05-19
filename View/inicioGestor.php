@@ -262,7 +262,7 @@
             <div class="modal-content">
                 <div class="modal-body row align-items-center p-4">
                     <div class="col-6 text-center">
-                        <img src="../Img/Logo.png" alt="Logo" class="figure-img img-fluid rounded">
+                        <img src="../Img/Logo1.png" alt="Logo" class="figure-img img-fluid rounded">
                         <h1>Cadastro de usuário</h1>
                         <p class="text-break">Insira as informações do funcionários</p>
                     </div>

@@ -36,7 +36,7 @@
 <main class="container-fluid p-2 font-padrao">
     <div class="container m-auto bg-white rounded shadow p-4 border row align-items-center">
         <div class="col-6 text-center">
-            <img src="../Img/Logo.png" alt="Logo" class="figure-img img-fluid rounded">
+            <img src="../Img/Logo1.png" alt="Logo" class="figure-img img-fluid rounded">
             <h1>Alteração de usuário</h1>
             <p class="text-break">Confira os dados do funcionário</p>
         </div>
