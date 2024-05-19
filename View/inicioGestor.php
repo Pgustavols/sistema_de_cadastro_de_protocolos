@@ -77,42 +77,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th>Nº Protocolo</th>
-                            <th>Título</th>
-                            <th>Enviado por</th>
-                            <th>Data de Envio</th>
-                            <th>Confirmar</th>
-                            <th>Recusar</th>
-                        </thead>
-                        <?php
-                    $dCon = new DocumentoController();
-                    $results = $dCon->telaPendentes(unserialize($_SESSION['Usuario'])->getCPF());
-                    if($results != null)
-                    while($row = $results->fetch_object()) {
-                    echo '<tr>';
-                    echo '<td>'.$row->nProtocolo.'</td>';
-                    echo '<td>'.$row->titulo.'</td>';
-                    echo '<td>'.$row->nome.'</td>';
-                    echo '<td>'.$row->data_da_acao.'</td>';
-                    echo '<td>
-                    <form action="../Controller/Navegacao.php" method="post">
-                        <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
-                        <button name="btnConfirmarDocumento" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
-                        <i class="bi bi-check"></i></button></td>';
-                        echo '<td>
+                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                        <table class="table table-striped table-hover rounded-3 shadow">
+                            <thead>
+                                <th class="text-center">Nº Protocolo</th>
+                                <th class="text-center">Título</th>
+                                <th class="text-center">Enviado por</th>
+                                <th class="text-center">Data de Envio</th>
+                                <th class="text-center">Confirmar</th>
+                                <th class="text-center">Recusar</th>
+                            </thead>
+                            <?php
+                        $dCon = new DocumentoController();
+                        $results = $dCon->telaPendentes(unserialize($_SESSION['Usuario'])->getCPF());
+                        if($results != null)
+                        while($row = $results->fetch_object()) {
+                        echo '<tr>';
+                        echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                        echo '<td class="text-center">'.$row->titulo.'</td>';
+                        echo '<td class="text-center">'.$row->nome.'</td>';
+                        echo '<td class="text-center">'.$row->data_da_acao.'</td>';
+                        echo '<td class="text-center">
                         <form action="../Controller/Navegacao.php" method="post">
-                        <input type="hidden" name="nProtocoloRecusar" value="'.$row->nProtocolo.'">
-                        <button name="btnRecusarDocumento" class="w3-button w3-block w3-blue
-                        w3-cell w3-round-large">
-                        <i class="bi bi-x"></i></button></td>
-                    </form>';
-                    echo '</tr>';
-                    }
-                    ?>
-                    </table>
+                            <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
+                            <button name="btnConfirmarDocumento"  class="btn btn-success"">
+                            <i class="bi bi-check"></i></button></td>';
+                            echo '<td  class="text-center">
+                            <form action="../Controller/Navegacao.php" method="post">
+                            <input type="hidden" name="nProtocoloRecusar" value="'.$row->nProtocolo.'">
+                            <button name="btnRecusarDocumento" class="btn btn-danger">
+                            <i class="bi bi-x"></i></button></td>
+                        </form>';
+                        echo '</tr>';
+                        }
+                        ?>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -158,10 +158,10 @@
                         <div class="col-3 my-3">
                             <label for="txtTipo" class="form-label">Tipo Documento</label>
                             <select class="form-select" id="txtTipo" name="txtTipo">
-                                <option value="1">Requerimento</option>
-                                <option value="2">Pedido de Compra</option>
-                                <option value="3">Ata</option>
-                                <option value="4">Relatório</option>
+                                <option value="Requerimento">Requerimento</option>
+                                <option value="Pedido de Compra">Pedido de Compra</option>
+                                <option value="Ata">Ata</option>
+                                <option value="Relatório">Relatório</option>
                             </select>
                         </div>
                         <div class="col-8 my-3">
@@ -196,38 +196,39 @@
                     </svg>
                 </button>
                 <br>
-                    <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th class="text-center">Nome</th>
-                            <th class="text-center">Setor</th>
-                            <th class="text-center">Nível</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center">Desativar</th>
-                        </thead>
-                        <?php
-                    $dCon = new UsuarioController();
-                    $results = $dCon->listaGestaoUsuarios();
-                    if($results != null)
-                    while($row = $results->fetch_object()) {
-                    echo '<tr>';
-                    echo '<td class="text-center">'.$row->nome.'</td>';
-                    echo '<td class="text-center">'.$row->setor.'</td>';
-                    echo '<td class="text-center">'.$row->nivel.'</td>';
-                    echo '<td>
-                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
-                        <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
-                        <button name="btnEditarUsuario" class="text-center btn btn-primary">
-                        <i class="bi bi-pencil"></i></button></form></td>';
+                    <div class="table-responsive" style="max-height: 400px; overflow-y:auto;">
+                        <table class="table table-striped table-hover rounded-3 shadow">
+                            <thead class="table-dark">
+                                <th class="text-center">Nome</th>
+                                <th class="text-center">Setor</th>
+                                <th class="text-center">Nível</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center">Desativar</th>
+                            </thead>
+                            <?php
+                        $dCon = new UsuarioController();
+                        $results = $dCon->listaGestaoUsuarios();
+                        if($results != null)
+                        while($row = $results->fetch_object()) {
+                        echo '<tr>';
+                        echo '<td class="text-center">'.$row->nome.'</td>';
+                        echo '<td class="text-center">'.$row->setor.'</td>';
+                        echo '<td class="text-center">'.$row->nivel.'</td>';
                         echo '<td>
-                    <form action="../Controller/Navegacao.php" method="post" class="text-center">
-                        <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
-                        <button name="btnDesativarUsuario" class="text-center btn btn-danger">
-                        <i class="bi bi-person-fill-x"></i></button></form></td>';
-                    echo '</tr>';
-                    }
-            ?>
-
-                    </table>
+                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                            <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
+                            <button name="btnEditarUsuario" class="text-center btn btn-primary">
+                            <i class="bi bi-pencil"></i></button></form></td>';
+                            echo '<td>
+                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                            <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
+                            <button name="btnDesativarUsuario" class="text-center btn btn-danger">
+                            <i class="bi bi-person-fill-x"></i></button></form></td>';
+                        echo '</tr>';
+                        }
+                        ?>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -278,31 +279,9 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="telaHistoricoDocumento" tabindex="-1" aria-labelledby="telaHistoricoDocumentoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="telaHistoricoDocumentoLabel">Histórico do Documento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Nº protocolo</p>
-                    <table class="table table-striped table-hover rounded-3 shadow">
-                        <thead>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Autor</th>
-                            <th>Movimentação</th>
-                            <th>Destino</th>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
+    <div class="mx-4 p-3 font-padrao rounded-3 shadow table-responsive" style="background-color: white; max-height: 400px; overflow-y:auto;">
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class="table-dark">
                 <th class="text-center">Nº Protocolo</th>
                 <th class="text-center">Título</th>
                 <th class="text-center">Possuidor</th>
