@@ -5,12 +5,12 @@
     }
 
     class DocumentoController{
-        public function aceitacaoDoDocumento($protocolo, $destinatario) {
+        public function aceitacaoDoDocumento($protocolo, $cpf_destinatario) {
             require_once '../Model/Documento.php';
             $documento = new Documento();
             $documento->setnProtocolo($protocolo);
-            $documento->setCpf_possuidor($destinatario);
-            $r = $documento->receberDocumento();
+            $documento->setCpf_possuidor($cpf_destinatario);
+            $r = $documento->receberDocumento($documento->getnProtocolo(), $documento->getCpf_possuidor());
             $_SESSION['documento'] = serialize($documento);
             return $r;
         }
