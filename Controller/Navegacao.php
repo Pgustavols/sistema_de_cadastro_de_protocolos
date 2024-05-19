@@ -62,6 +62,30 @@
             }
             break;
 
+        //Tela de alteraração de usuario
+        case isset($_POST["btnEditarUsuario"]):
+            require_once "../Model/Usuario.php";
+            
+            $uController = new Usuario();
+            $results = $uController->alterarUsuario($_POST['cpfEdit']);
+            
+            if ($results) {
+                // Construa a URL de redirecionamento com os parâmetros extraídos
+                $url = "../View/alterarUsuario.php?cpf=" . urlencode($results['cpf']) .
+                        "&nome=" . urlencode($results['nome']) .
+                        "&setor=" . urlencode($results['setor']) .
+                        "&email=" . urlencode($results['email']) .
+                        "&senha=" . urlencode($results['senha']) .
+                        "&nivel=" . urlencode($results['nivel']);
+                header("Location: $url");
+                exit;
+            } else {
+                // Trate a situação onde o documento não foi encontrado
+                header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
+                exit;
+            }
+            break;
+
         //Confirmar documento
         case isset($_POST["btnConfirmarDocumentoComum"]):
             require_once "../Model/Usuario.php";
@@ -78,31 +102,30 @@
             }
             break;
 
-            //Visualizar documento
-            case isset($_POST["btnVisualizarDoc"]):
-                require_once "../Controller/DocumentoController.php";
-                require_once "../Model/Documento.php";
-                
-                $documentoController = new Documento();
-                $results = $documentoController->visualizarDocumento($_POST['nProtocoloVisualizacao']);
-                
-                if ($results) {
-                    // Construa a URL de redirecionamento com os parâmetros extraídos
-                    $url = "../View/visualizarDocumento.php?nProtocolo=" . urlencode($results['nProtocolo']) .
-                           "&nome_possuidor=" . urlencode($results['nome_possuidor']) .
-                           "&nome_destinatario=" . urlencode($results['nome_destinatario']) .
-                           "&setor_destinatario=" . urlencode($results['setor_destinatario']) .
-                           "&data_de_cadastro=" . urlencode($results['data_de_cadastro']) .
-                           "&tipo=" . urlencode($results['tipo']) .
-                           "&titulo=" . urlencode($results['titulo']);
-                    header("Location: $url");
-                    exit;
-                } else {
-                    // Trate a situação onde o documento não foi encontrado
-                    header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
-                    exit;
-                }
-                break;
+        //Visualizar documento
+        case isset($_POST["btnVisualizarDoc"]):
+            require_once "../Model/Documento.php";
+            
+            $documentoController = new Documento();
+            $results = $documentoController->visualizarDocumento($_POST['nProtocoloVisualizacao']);
+            
+            if ($results) {
+                // Construa a URL de redirecionamento com os parâmetros extraídos
+                $url = "../View/visualizarDocumento.php?nProtocolo=" . urlencode($results['nProtocolo']) .
+                        "&nome_possuidor=" . urlencode($results['nome_possuidor']) .
+                        "&nome_destinatario=" . urlencode($results['nome_destinatario']) .
+                        "&setor_destinatario=" . urlencode($results['setor_destinatario']) .
+                        "&data_de_cadastro=" . urlencode($results['data_de_cadastro']) .
+                        "&tipo=" . urlencode($results['tipo']) .
+                        "&titulo=" . urlencode($results['titulo']);
+                header("Location: $url");
+                exit;
+            } else {
+                // Trate a situação onde o documento não foi encontrado
+                header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
+                exit;
+            }
+            break;
 
             //Historico documento
             case isset($_POST["btnHistoricoDoc"]):

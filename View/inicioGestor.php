@@ -238,15 +238,15 @@
                         echo '<td class="text-center">'.$row->nome.'</td>';
                         echo '<td class="text-center">'.$row->setor.'</td>';
                         echo '<td class="text-center">'.$row->nivel.'</td>';
-                        echo '<td>
-                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                        echo '<td class="text-center">
+                        <form action="../Controller/Navegacao.php" method="post">
                             <input type="hidden" name="cpfEdit" value="'.$row->cpf.'">
-                            <button name="btnEditarUsuario" class="text-center btn btn-primary">
+                            <button name="btnEditarUsuario" class="btn btn-primary">
                             <i class="bi bi-pencil"></i></button></form></td>';
-                            echo '<td>
-                        <form action="../Controller/Navegacao.php" method="post" class="text-center">
+                        echo '<td class="text-center">
+                        <form action="../Controller/Navegacao.php" method="post">
                             <input type="hidden" name="cpfDes" value="'.$row->cpf.'">
-                            <button name="btnDesativarUsuario" class="text-center btn btn-danger">
+                            <button name="btnDesativarUsuario" class="btn btn-danger">
                             <i class="bi bi-person-fill-x"></i></button></form></td>';
                         echo '</tr>';
                         }

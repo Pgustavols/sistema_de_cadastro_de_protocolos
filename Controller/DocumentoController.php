@@ -43,11 +43,5 @@
             return $r;
         }
         
-        public function visualizarDocumento($nProtocolo){
-            require_once "../Model/Documento.php";
-            $documento = new Documento();
-            $r = $documento->visualizarDocumento($nProtocolo);
-            return $r;
-        }
     }
 ?>

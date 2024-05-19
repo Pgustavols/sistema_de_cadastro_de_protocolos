@@ -197,6 +197,34 @@
                 $conn->close();
                 return $setorDestinatario;
             }
+
+            public function alterarUsuario($cpf){
+                require_once "ConexaoBD.php";
+    
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+    
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
+    
+                $sql = "SELECT * FROM usuario WHERE cpf = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $cpf);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc(); // Extrai os dados como um array associativo
+                    $stmt->close();
+                    $conn->close();
+                    return $row;
+                } else {
+                    $stmt->close();
+                    $conn->close();
+                    return false;
+                }
+            }
     
     }
 ?>
