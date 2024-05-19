@@ -143,6 +143,60 @@
                 $conn->close();
                 return $re;
             }
+
+            public function listaDestinatarios($cpf_logado) {
+                require_once "ConexaoBD.php";
+            
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+            
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+            
+                // Certifique-se de usar uma consulta preparada para evitar injeção de SQL
+                $stmt = $conn->prepare("SELECT cpf, nome FROM usuario WHERE cpf <> ?");
+                $stmt->bind_param("s", $cpf_logado);
+                $stmt->execute();
+                $result = $stmt->get_result();
+            
+                $destinatarios = [];
+                while ($row = $result->fetch_assoc()) {
+                    $destinatarios[] = ['cpf' => $row['cpf'], 'nome' => $row['nome']];
+                }
+            
+                $stmt->close();
+                $conn->close();
+                return $destinatarios;
+            }
+
+            public function listaSetorDestinatario($cpf_da_option) {
+                require_once "ConexaoBD.php";
+            
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+            
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+            
+                // Certifique-se de usar uma consulta preparada para evitar injeção de SQL
+                $stmt = $conn->prepare("SELECT setor FROM usuario WHERE cpf = ?");
+                $stmt->bind_param("s", $cpf_da_option);
+                $stmt->execute();
+                $result = $stmt->get_result();
+            
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $setorDestinatario = $row['setor'];
+                } else {
+                    $setorDestinatario = ""; // Ou algum valor padrão, caso não encontre
+                }
+            
+                $stmt->close();
+                $conn->close();
+                return $setorDestinatario;
+            }
     
     }
 ?>
