@@ -15,6 +15,13 @@
             return $r;
         }
 
+        public function recusarDocumento($nProtocolo){
+            require_once "../Model/Documento.php";
+            $d = new Documento();
+            $r = $d->naoAceitarDocumentos($nProtocolo);
+            return $r;
+        }
+
         public function telaInicialdocumento($cpf_possuidor, $cpf_destinatario){
             require_once '../Model/Documento.php';
             $documento = new Documento();
