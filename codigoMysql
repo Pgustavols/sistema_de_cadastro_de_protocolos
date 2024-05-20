@@ -71,7 +71,7 @@ begin
         
         if(new.estado = "Não aceito") then
 			insert into movimentacao(nProtocolo, estado, cpf_destinatario, data_da_acao, cpf_remetente)
-            values(new.nProtocolo, "Recusado", new.cpf_possuidor, CURDATE(), old.cpf_destinatario);
+            values(new.nProtocolo, "Recusado", "", CURDATE(), new.cpf_possuidor);
         end if;
 end ;
    	
