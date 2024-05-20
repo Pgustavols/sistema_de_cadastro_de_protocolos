@@ -49,6 +49,22 @@
             $r = $documento->escreverDocumento($cpf_possuidor, $cpf_destinatario, $tipo, $titulo);
             return $r;
         }
+
+        public function enviarDocumento($cpf_destinatario, $nProtocolo){
+            require_once "../Model/Documento.php";
+            $documento = new Documento();
+            $documento->setCpf_destinatario($cpf_destinatario);
+            $documento->setnProtocolo($nProtocolo);
+            $r = $documento->enviarDocumento($cpf_destinatario, $nProtocolo);
+            return $r;
+        }
         
+        public function excluirDocumento($nProtocolo){
+            require_once "../Model/Documento.php";
+            $documento = new Documento();
+            $documento->setnProtocolo($nProtocolo);
+            $r = $documento->excluirDocumento($nProtocolo);
+            return $r;
+        }
     }
 ?>

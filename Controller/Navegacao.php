@@ -111,44 +111,44 @@
             require_once "../Controller/DocumentoController.php";
             $documentoController = new DocumentoController();
             if ($documentoController->aceitacaoDoDocumento($_POST["nProtocoloConfirmarComum"], unserialize($_SESSION['Usuario'])->getCPF())) {
-                echo "<script>
-                alert('Documento Aceito');
-                window.history.back();
-                </script>";
-                include_once "../View/inicioUsuario.php";
+                include_once "../View/documentoAceito.php";
             } else {
                 include_once "../View/inicioUsuario.php";
             }
             break;
 
-        
+        //Confirmar documento comum
         case isset($_POST["btnConfirmarDocumento"]):
             require_once "../Model/Usuario.php";
             require_once "../Controller/DocumentoController.php";
             $documentoController = new DocumentoController();
 
             if ($documentoController->aceitacaoDoDocumento($_POST["nProtocoloConfirmarGestor"], unserialize($_SESSION['Usuario'])->getCPF())) {
-                echo "<script>
-                alert('Documento Aceito');
-                window.history.back();
-                </script>";
-                include_once "../View/inicioUsuario.php";
+                include_once "../View/documentoAceito.php";
             } else {
                 include_once "../View/inicioUsuario.php";
             }
             break;
 
-
+        //Recusar documento
         case isset($_POST["btnRecusarDocumento"]):
             require_once "../Controller/DocumentoController.php";
             $dc = new DocumentoController();
         
             if($dc->recusarDocumento($_POST["nProtocoloRecusarGestor"])){
-                echo "<script>
-                alert('Documento Recusado');
-                window.history.back();
-                </script>";
+                include_once "../View/documentoNaoAceito.php";
+            } else {
                 include_once "../View/inicioUsuario.php";
+            }
+            break;
+        
+        //Recusar documento comum
+        case isset($_POST["btnRecusarDocumentoComum"]):
+            require_once "../Controller/DocumentoController.php";
+            $dc = new DocumentoController();
+        
+            if($dc->recusarDocumento($_POST["nProtocoloRecusarComum"])){
+                include_once "../View/documentoNaoAceito.php";
             } else {
                 include_once "../View/inicioUsuario.php";
             }
@@ -169,13 +169,49 @@
                         "&setor_destinatario=" . urlencode($results['setor_destinatario']) .
                         "&data_de_cadastro=" . urlencode($results['data_de_cadastro']) .
                         "&tipo=" . urlencode($results['tipo']) .
-                        "&titulo=" . urlencode($results['titulo']);
+                        "&titulo=" . urlencode($results['titulo']).
+                        "&estado=" . urlencode($results['estado']);
                 header("Location: $url");
                 exit;
             } else {
                 // Trate a situação onde o documento não foi encontrado
                 header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
                 exit;
+            }
+            break;
+
+        //Tela envio documento
+        case isset($_POST["btnTelaEnvio"]):
+            require_once "../Model/Documento.php";
+            
+            if($_POST['txtStatus'] == 'Pendente'){
+                echo
+                "<script>
+                alert('O documento está pendente, portanto não pode ser enviado.');
+                window.history.back();
+                </script>";
+            } elseif($_POST['txtStatus'] == 'Excluído'){
+                echo
+                "<script>
+                alert('O documento foi excluído, portanto não pode ser enviado.');
+                window.history.back();
+                </script>";
+                break;
+            }else{
+                $documentoController = new Documento();
+                $results = $documentoController->visualizarDocumento($_POST['txtnProtocolo']);
+                
+                if ($results) {
+                    // Construa a URL de redirecionamento com os parâmetros extraídos
+                    $url = "../View/enviarDocumento.php?nProtocolo=" . urlencode($results['nProtocolo']) .
+                            "&titulo=" . urlencode($results['titulo']);
+                    header("Location: $url");
+                    exit;
+                } else {
+                    // Trate a situação onde o documento não foi encontrado
+                    header("Location: ../View/errorPage.php?error=DocumentoNaoEncontrado");
+                    exit;
+                }
             }
             break;
 
@@ -198,6 +234,18 @@
             }
             break;
                   
+        //Envio documento  
+        case isset($_POST["btnEnviarDoc"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+            if($documentoController->enviarDocumento($_POST["txtDestinatario"], $_POST["txtnProtocolo"])){
+                include_once "../View/documentoEnviado.php";
+            } else {
+                include_once "../View/documentoNaoEnviado.php";
+            }
+            break;;
+
         //Cadastro documento  
         case isset($_POST["btnCadastrarDocumentoGestor"]):
             require_once "../Model/Usuario.php";
@@ -207,6 +255,30 @@
                 include_once "../View/cadastroRealizado.php";
             } else {
                 include_once "../View/cadastroNaoRealizado.php";
+            }
+            break;;
+
+        //Cadastro documento Comum
+        case isset($_POST["btnCadastrarDocumentoComum"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+            if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
+                include_once "../View/cadastroRealizado.php";
+            } else {
+                include_once "../View/cadastroNaoRealizado.php";
+            }
+            break;;
+        
+        //Excluir documento
+        case isset($_POST["btnExcluirDoc"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+            if($documentoController->excluirDocumento($_POST["txtnProtocolo"])){
+                include_once "../View/documentoExcluido.php";
+            } else {
+                include_once "../View/documentoNaoExcluido.php";
             }
             break;;
         
@@ -239,6 +311,60 @@
 
         //Alteração não realizada
         case isset($_POST["btnAltNaoRealizada"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+        
+        //Documento aceito
+        case isset($_POST["btnDocAceito"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+        
+        //Documento não aceito
+        case isset($_POST["btnDocNaoAceito"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+        //Documento excluido
+        case isset($_POST["btnDocExcluido"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+        //Documento não excluido
+        case isset($_POST["btnDocNaoExcluido"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+        //Documento enviado
+        case isset($_POST["btnDocEnviado"]):
+            if($_SESSION['nivel'] == 'Gerente'){
+                include_once "../View/inicioGestor.php";
+            } elseif ($_SESSION['nivel'] == 'Comum'){
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+        //Documento não enviado
+        case isset($_POST["btnDocNaoEnviado"]):
             if($_SESSION['nivel'] == 'Gerente'){
                 include_once "../View/inicioGestor.php";
             } elseif ($_SESSION['nivel'] == 'Comum'){

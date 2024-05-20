@@ -50,13 +50,11 @@
 <main class="container-fluid p-3">
     <div class="my-3 p-3 m-auto font-padrao row justify-content-between">
         <div class="col-9">
-            <form action="../Controller/Navegacao.php" class="input-group mb-3 h-100">
+            <form action="#" class="input-group mb-3 h-100">
                 <input type="number" class="form-control" id="pesquisa" name="pesquisa" placeholder="Pesquisar por Nº de Protocolo">
-                <button name="btnPesquisar" class="btn btn-dark" id="btnPesquisar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                    </svg>
-                </button>
+                <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                </span>    
             </form>
         </div>
         <div class="col-1">
@@ -113,7 +111,7 @@
                         echo '<td class="text-center">
                         <form action="../Controller/Navegacao.php" method="post">
                         <input type="hidden" name="nProtocoloRecusarComum" value="'.$row->nProtocolo.'">
-                        <button name="btnRecusarDocumento" class="btn btn-danger">
+                        <button name="btnRecusarDocumentoComum" class="btn btn-danger">
                         <i class="bi bi-x"></i></button></td>
                     </form>';
                     echo '</tr>';
@@ -135,7 +133,7 @@
                     <form action="" method="POST" class="row g-3 justify-content-between">
                         <div class="col-2 my-3">
                             <label for="txtProtocolo" class="form-label">Nº Protocolo</label>
-                            <input type="number" class="form-control" id="txtProtocolo" name="txtProtocolo" disabled>
+                            <input type="number" class="form-control" id="txtProtocolo" name="txtProtocolo" placeholder="<?php echo htmlspecialchars($protocolo); ?>" disabled>
                         </div>
                         <div class="col-10 my-3">
                             <label for="txtTitulo" class="form-label">Título</label>
@@ -160,7 +158,7 @@
                         </script>
                         <div class="col-6 my-3">
                             <label for="txtPossuidor" class="form-label">Possuidor</label>
-                            <input type="text" class="form-control" id="txtPossuidor" name="txtPossuidor" disabled>
+                            <input type="text" class="form-control" id="txtPossuidor" name="txtPossuidor" placeholder="Eu" disabled>
                         </div>
                         <div class="col-3 my-3">
                             <label for="txtTipo" class="form-label">Tipo Documento</label>
@@ -186,7 +184,7 @@
                             <input class="form-control" id="txtSetor" name="txtSetor" disabled>
                         </div>
                         <button name="btnCancelar" class="col-5 btn btn-danger my-3">Cancelar</button>
-                        <button class="col-5 btn btn-dark my-3">Cadastrar</button>
+                        <button name="btnCadastrarDocumentoComum" class="col-5 btn btn-dark my-3">Cadastrar</button>
                     </form>
                 </div>
             </div>
@@ -194,7 +192,7 @@
     </div>
     <div class="mx-4 p-3 font-padrao rounded-3 shadow" style="background-color: white;">
         <div class="table-responsive" style="max-height: 350px;">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="tabelaDocumentos">
                 <thead class="table-dark">
                     <th class="text-center">Nº Protocolo</th>
                     <th class="text-center">Título</th>
@@ -203,34 +201,59 @@
                     <th class="text-center">Visualizar</th>
                     <th class="text-center">Histórico</th>
                 </thead>
-                <?php
-                    $dCon = new DocumentoController();
-                    $results = $dCon->telaInicialComum(unserialize($_SESSION['Usuario'])->getCPF());
-                    if($results != null)
-                    while($row = $results->fetch_object()) {
-                    echo '<tr>';
-                    echo '<td class="text-center">'.$row->nProtocolo.'</td>';
-                    echo '<td class="text-center">'.$row->titulo.'</td>';
-                    echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_de_cadastro)).'</td>';
-                    echo '<td class="text-center">'.$row->estado.'</td>';
-                    echo '<td class="text-center">
-                    <form action="../Controller/Navegacao.php" method="post">
-                    <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
-                    <button name="btnVisualizarDoc" class="btn btn-dark">
-                    <i class="bi bi-eye"></i></button></td>';
-                    echo '<td class="text-center">
-                    <form action="../Controller/Navegacao.php" method="post">
-                    <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
-                    <button name="btnHistoricoDoc" class="btn btn-dark">
-                    <i class="bi bi-clock-history"></i></button></td>
-                    </form>';
-                    echo '</tr>';
-                    }
-                ?>
+                <tbody>
+                    <?php
+                        $dCon = new DocumentoController();
+                        $results = $dCon->telaInicialComum(unserialize($_SESSION['Usuario'])->getCPF());
+                        if($results != null)
+                        while($row = $results->fetch_object()) {
+                        echo '<tr>';
+                        echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                        echo '<td class="text-center">'.$row->titulo.'</td>';
+                        echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_de_cadastro)).'</td>';
+                        echo '<td class="text-center">'.$row->estado.'</td>';
+                        echo '<td class="text-center">
+                        <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
+                        <button name="btnVisualizarDoc" class="btn btn-dark">
+                        <i class="bi bi-eye"></i></button></td>';
+                        echo '<td class="text-center">
+                        <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                        <button name="btnHistoricoDoc" class="btn btn-dark">
+                        <i class="bi bi-clock-history"></i></button></td>
+                        </form>';
+                        echo '</tr>';
+                        }
+                    ?>
+                </tbody>
             </table>
         </div>
     </div>
 </main>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.getElementById("pesquisa");
+            const dataTable = document.getElementById("tabelaDocumentos").getElementsByTagName("tbody")[0];
+
+            searchInput.addEventListener("input", function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = dataTable.getElementsByTagName("tr");
+
+                for (let i = 0; i < rows.length; i++) {
+                    const cell = rows[i].getElementsByTagName("td")[0]; // Primeira coluna
+                    const cellValue = cell.textContent || cell.innerText;
+
+                    if (cellValue.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            });
+        });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

@@ -13,6 +13,9 @@
         .font-padrao {
             font-family: Roboto;
         }
+        .table-danger {
+            background-color: #f8d7da;
+        }
 
     </style>
 </head>
@@ -56,10 +59,9 @@
         <div class="col-7">
             <form action="../Controller/Navegacao.php" class="input-group mb-3 h-100">
                 <input type="number" class="form-control" id="pesquisa" name="pesquisa" placeholder="Pesquisar por Nº de Protocolo">
-                <button name="btnPesquisar" class="btn btn-dark" id="btnPesquisar"> 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                    </svg>
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span> 
                 </button>
             </form>
         </div>
@@ -303,7 +305,7 @@
     </div>
     <div class="mx-4 p-3 font-padrao rounded-3 shadow table-responsive" style="background-color: white;">
         <div class="table-responsive" style="max-height: 350px;">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="tabelaDocumentos">
                 <thead class="table-dark">
                     <th class="text-center">Nº Protocolo</th>
                     <th class="text-center">Título</th>
@@ -313,34 +315,60 @@
                     <th class="text-center">Visualizar</th>
                     <th class="text-center">Histórico</th>
                 </thead>
-                <?php
-                    $dCon = new DocumentoController();
-                    $results = $dCon->telaInicialdocumento(unserialize($_SESSION['Usuario'])->getCPF(), unserialize($_SESSION['Usuario'])->getCPF());
-                    if($results != null)
-                    while($row = $results->fetch_object()) {
-                    echo '<tr>';
-                    echo '<td class="text-center">'.$row->nProtocolo.'</td>';
-                    echo '<td class="text-center">'.$row->titulo.'</td>';
-                    echo '<td class="text-center">'.$row->nome.'</td>';
-                    echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_de_cadastro)).'</td>';
-                    echo '<td class="text-center">'.$row->estado.'</td>';
-                    echo '<td class="text-center">
-                    <form action="../Controller/Navegacao.php" method="post">
-                    <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
-                    <button name="btnVisualizarDoc" class="btn btn-dark">
-                    <i class="bi bi-eye"></i></button></form></td>';
-                    echo '<td class="text-center">
-                    <form action="../Controller/Navegacao.php" method="post">
-                    <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
-                    <button name="btnHistoricoDoc" class="btn btn-dark">
-                    <i class="bi bi-clock-history"></i></button></form></td>';
-                    echo '</tr>';
-                    }
-                ?>
+                <tbody>
+                    <?php
+                        $dCon = new DocumentoController();
+                        $results = $dCon->telaInicialdocumento(unserialize($_SESSION['Usuario'])->getCPF(), unserialize($_SESSION['Usuario'])->getCPF());
+                        if($results != null)
+                        while($row = $results->fetch_object()) {
+                        $rowClass = ($row->estado == 'Excluído') ? 'table-danger' : '';
+                        echo '<tr class="'.$rowClass.'">';
+                        echo '<td class="text-center">'.$row->nProtocolo.'</td>';
+                        echo '<td class="text-center">'.$row->titulo.'</td>';
+                        echo '<td class="text-center">'.$row->nome.'</td>';
+                        echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_de_cadastro)).'</td>';
+                        echo '<td class="text-center">'.$row->estado.'</td>';
+                        echo '<td class="text-center">
+                        <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloVisualizacao" value="'.$row->nProtocolo.'">
+                        <button name="btnVisualizarDoc" class="btn btn-dark">
+                        <i class="bi bi-eye"></i></button></form></td>';
+                        echo '<td class="text-center">
+                        <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloHist" value="'.$row->nProtocolo.'">
+                        <button name="btnHistoricoDoc" class="btn btn-dark">
+                        <i class="bi bi-clock-history"></i></button></form></td>';
+                        echo '</tr>';
+                        }
+                    ?>
+                </tbody>
             </table>
         </div>
     </div>
 </main>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.getElementById("pesquisa");
+            const dataTable = document.getElementById("tabelaDocumentos").getElementsByTagName("tbody")[0];
+
+            searchInput.addEventListener("input", function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = dataTable.getElementsByTagName("tr");
+
+                for (let i = 0; i < rows.length; i++) {
+                    const cell = rows[i].getElementsByTagName("td")[0]; // Primeira coluna
+                    const cellValue = cell.textContent || cell.innerText;
+
+                    if (cellValue.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            });
+        });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

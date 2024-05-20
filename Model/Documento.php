@@ -146,13 +146,20 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE documento SET cpf_destinatario = '".$this->cpf_destinatario."', estado ='".
-                "Pendente"."'WHERE nProtocolo = '".$this->nProtocolo.'";"';
-               
-                if($conn->query($sql) === TRUE){
+                $sql = "UPDATE documento SET cpf_destinatario = ?, estado = 'Pendente' WHERE nProtocolo = ?";
+                $stmt = $conn->prepare($sql);
+                if ($stmt === false) {
+                    die("Error preparing statement: " . $conn->error);
+                }
+                
+                $stmt->bind_param("ss",$this->cpf_destinatario, $this->nProtocolo);
+            
+                if ($stmt->execute() === TRUE) {
+                    $stmt->close();
                     $conn->close();
                     return TRUE;
-                }else{
+                } else {
+                    $stmt->close();
                     $conn->close();
                     return FALSE;
                 }
@@ -188,13 +195,20 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE documento SET estado = ".'"Excluído"'.", cpf_possuidor = ".null.
-                'WHERE protocolo = '.$this->nProtocolo.";";
-               
-                if($conn->query($sql) === TRUE){
+                $sql = "UPDATE documento SET estado = 'Excluído' , cpf_possuidor = (SELECT cpf FROM usuario WHERE nivel = 'Gerente' LIMIT 1) WHERE nProtocolo = ?";
+                $stmt = $conn->prepare($sql);
+                if ($stmt === false) {
+                    die("Error preparing statement: " . $conn->error);
+                }
+                
+                $stmt->bind_param("s", $this->nProtocolo);
+            
+                if ($stmt->execute() === TRUE) {
+                    $stmt->close();
                     $conn->close();
                     return TRUE;
-                }else{
+                } else {
+                    $stmt->close();
                     $conn->close();
                     return FALSE;
                 }
