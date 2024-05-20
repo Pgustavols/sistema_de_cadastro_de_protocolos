@@ -120,12 +120,12 @@
                     echo '<td class="text-center">'.date('d/m/Y', strtotime($row->data_da_acao)).'</td>';
                     echo '<td class="text-center">
                     <form action="../Controller/Navegacao.php" method="post">
-                        <input type="hidden" name="nProtocoloConfirmar" value="'.$row->nProtocolo.'">
+                        <input type="hidden" name="nProtocoloConfirmarGestor" value="'.$row->nProtocolo.'">
                         <button name="btnConfirmarDocumento" class="btn btn-success">
                         <i class="bi bi-check"></i></button></td>';
                     echo '<td class="text-center">
-                        <form action="../Controller/Navegacao.php" method="post">
-                        <input type="hidden" name="nProtocoloRecusar" value="'.$row->nProtocolo.'">
+                    <form action="../Controller/Navegacao.php" method="post">
+                        <input type="hidden" name="nProtocoloRecusarGestor" value="'.$row->nProtocolo.'">
                         <button name="btnRecusarDocumento" class="btn btn-danger">
                         <i class="bi bi-x"></i></button></td>
                     </form>';
