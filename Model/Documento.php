@@ -201,7 +201,7 @@
             }
         
 
-            public function naoAceitarDocumentos(){
+            public function naoAceitarDocumentos($nProtocolo){
                 require_once "ConexaoBD.php";
 
                 $con = new ConexaoBD();
@@ -210,8 +210,8 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE documento SET estado = ".'"Não aceito"'.", cpf_destinatario = ".$this->cpf_destinatario.
-                'WHERE protocolo = '.$this->nProtocolo.";";
+                $sql = "UPDATE documento SET estado = ".'"Não aceito"'.", cpf_destinatario = ".'""'.
+                'WHERE nProtocolo = '.$nProtocolo.";";
                
                 if($conn->query($sql) === TRUE){
                     $conn->close();
@@ -326,7 +326,6 @@
                 $conn->close();
                 return $nextProtocolo;
             }
-
 
     }
 ?>
