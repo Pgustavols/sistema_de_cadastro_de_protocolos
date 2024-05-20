@@ -121,6 +121,39 @@
             }
             break;
 
+        
+        case isset($_POST["btnConfirmarDocumento"]):
+            require_once "../Model/Usuario.php";
+            require_once "../Controller/DocumentoController.php";
+            $documentoController = new DocumentoController();
+
+            if ($documentoController->aceitacaoDoDocumento($_POST["nProtocoloConfirmarGestor"], unserialize($_SESSION['Usuario'])->getCPF())) {
+                echo "<script>
+                alert('Documento Aceito');
+                window.history.back();
+                </script>";
+                include_once "../View/inicioUsuario.php";
+            } else {
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
+
+        case isset($_POST["btnRecusarDocumento"]):
+            require_once "../Controller/DocumentoController.php";
+            $dc = new DocumentoController();
+        
+            if($dc->recusarDocumento($_POST["nProtocoloRecusarGestor"])){
+                echo "<script>
+                alert('Documento Recusado');
+                window.history.back();
+                </script>";
+                include_once "../View/inicioUsuario.php";
+            } else {
+                include_once "../View/inicioUsuario.php";
+            }
+            break;
+
         //Visualizar documento
         case isset($_POST["btnVisualizarDoc"]):
             require_once "../Model/Documento.php";
