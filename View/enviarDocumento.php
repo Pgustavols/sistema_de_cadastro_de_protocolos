@@ -66,7 +66,7 @@
             </div>
             <div class="col-10 my-3">
                 <label for="txtTitulo" class="form-label">Título</label>
-                <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" value="<?php echo $_GET['titulo']?>">
+                <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" readonly value="<?php echo $_GET['titulo']?>">
             </div>
             <div class="col-8 my-3">
                 <label for="txtDestinatario" class="form-label">Destinatário</label>
