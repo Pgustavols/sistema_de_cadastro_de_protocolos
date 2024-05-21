@@ -50,12 +50,10 @@
             return $r;
         }
 
-        public function enviarDocumento($cpf_destinatario, $nProtocolo){
+        public function envioDocumento($nProtocolo, $cpf_destinatario){
             require_once "../Model/Documento.php";
             $documento = new Documento();
-            $documento->setCpf_destinatario($cpf_destinatario);
-            $documento->setnProtocolo($nProtocolo);
-            $r = $documento->enviarDocumento($cpf_destinatario, $nProtocolo);
+            $r = $documento->enviarDocumento($nProtocolo, $cpf_destinatario);
             return $r;
         }
         
@@ -64,6 +62,13 @@
             $documento = new Documento();
             $documento->setnProtocolo($nProtocolo);
             $r = $documento->excluirDocumento($nProtocolo);
+            return $r;
+        }
+
+        public function alteraTituloDocumento($titulo, $nProtocolo){
+            require_once "../Model/Documento.php";
+            $d = new Documento();
+            $r = $d->alterarDocumento($titulo, $nProtocolo);
             return $r;
         }
     }
