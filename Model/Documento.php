@@ -137,7 +137,7 @@
                 }
             }
 
-            public function enviarDocumento(){
+            public function enviarDocumento($nProtocolo, $cpf_destinatario){
                 require_once "ConexaoBD.php";
 
                 $con = new ConexaoBD();
@@ -146,26 +146,18 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE documento SET cpf_destinatario = ?, estado = 'Pendente' WHERE nProtocolo = ?";
-                $stmt = $conn->prepare($sql);
-                if ($stmt === false) {
-                    die("Error preparing statement: " . $conn->error);
-                }
-                
-                $stmt->bind_param("ss",$this->cpf_destinatario, $this->nProtocolo);
-            
-                if ($stmt->execute() === TRUE) {
-                    $stmt->close();
+                $sql = "UPDATE documento SET cpf_destinatario = '$cpf_destinatario', estado = 'Pendente' WHERE nProtocolo = '$nProtocolo';";
+
+                if($conn->query($sql) === TRUE){
                     $conn->close();
                     return TRUE;
-                } else {
-                    $stmt->close();
+                }else{
                     $conn->close();
                     return FALSE;
                 }
             }
 
-            public function alterarDocumento(){
+            public function alterarDocumento($titulo, $nProtocolo){
                 require_once "ConexaoBD.php";
 
                 $con = new ConexaoBD();
@@ -174,8 +166,7 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
     
-                $sql = "UPDATE documento SET titulo = '".$this->titulo."', estado ='".
-                "Alterado"."'WHERE nProtocolo = '".$this->nProtocolo.'";"';
+                $sql = "UPDATE documento SET titulo = '" . $titulo . "', estado = 'Alterado', cpf_destinatario = '' WHERE nProtocolo = '" . $nProtocolo . "';";
                
                 if($conn->query($sql) === TRUE){
                     $conn->close();
@@ -298,14 +289,29 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
                 
-                $sql = "SELECT * FROM view_documentos_detalhados WHERE nProtocolo = ?";
+                $sql = "SELECT a.nProtocolo, a.titulo, a.data_de_cadastro, b.nome AS nome_possuidor, 
+                a.tipo, c.nome AS nome_destinatario, c.setor AS setor_destinatario, 
+                a.estado 
+                FROM documento a 
+                INNER JOIN (
+                    SELECT nProtocolo, nome 
+                    FROM documento 
+                    INNER JOIN usuario ON cpf = cpf_possuidor
+                ) b ON a.nProtocolo = b.nProtocolo 
+                LEFT JOIN (
+                    SELECT nProtocolo, nome, setor 
+                    FROM documento 
+                    INNER JOIN usuario ON cpf = cpf_destinatario
+                ) c ON c.nProtocolo = a.nProtocolo 
+                WHERE a.nProtocolo = ?
+                ORDER BY a.nProtocolo;";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $nProtocolo);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 
                 if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc(); // Extrai os dados como um array associativo
+                    $row = $result->fetch_assoc(); 
                     $stmt->close();
                     $conn->close();
                     return $row;
