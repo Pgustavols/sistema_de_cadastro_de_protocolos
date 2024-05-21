@@ -2,7 +2,7 @@
     class ConexaoBD{
         private $serverName = "localhost";
         private $userName = "root";
-        private $password = "Kael112131";
+        private $password = "";
         private $dbName = "sistema_de_protocolo";
 
         public function conectar(){
