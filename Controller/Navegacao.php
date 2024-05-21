@@ -182,6 +182,7 @@
 
         //Tela envio documento
         case isset($_POST["btnTelaEnvio"]):
+            require_once "../Model/Usuario.php";
             require_once "../Model/Documento.php";
             
             if($_POST['txtStatus'] == 'Pendente'){
@@ -196,8 +197,17 @@
                 alert('O documento foi excluído, portanto não pode ser enviado.');
                 window.history.back();
                 </script>";
-                break;
-            }else{
+                // break;
+            }else if($_POST["txtPossuidor"] !== unserialize($_SESSION['Usuario'])->getNome()){
+                echo
+                "<script>
+                alert('Você não é o possuidor deste documento, portanto não pode ser enviado.');
+                window.history.back();
+                </script>";
+            }
+            
+            
+            else{
                 $documentoController = new Documento();
                 $results = $documentoController->visualizarDocumento($_POST['txtnProtocolo']);
                 
@@ -236,10 +246,9 @@
                   
         //Envio documento  
         case isset($_POST["btnEnviarDoc"]):
-            require_once "../Model/Usuario.php";
             require_once "../Controller/DocumentoController.php";
             $documentoController = new DocumentoController();
-            if($documentoController->enviarDocumento($_POST["txtDestinatario"], $_POST["txtnProtocolo"])){
+            if($documentoController->envioDocumento($_POST["txtnProtocolo"], $_POST["txtDestinatario"])){
                 include_once "../View/documentoEnviado.php";
             } else {
                 include_once "../View/documentoNaoEnviado.php";
@@ -275,11 +284,30 @@
             require_once "../Model/Usuario.php";
             require_once "../Controller/DocumentoController.php";
             $documentoController = new DocumentoController();
-            if($documentoController->excluirDocumento($_POST["txtnProtocolo"])){
-                include_once "../View/documentoExcluido.php";
-            } else {
-                include_once "../View/documentoNaoExcluido.php";
+
+            if($_POST['txtStatus'] == 'Pendente'){
+                echo
+                "<script>
+                alert('O documento está pendente, portanto não pode ser excluído.');
+                window.history.back();
+                </script>";
+            } elseif($_POST['txtStatus'] == 'Excluído'){
+                echo
+                "<script>
+                alert('O documento já está excluído.');
+                window.history.back();
+                </script>";
+            }else if($_POST["txtPossuidor"] !== unserialize($_SESSION['Usuario'])->getNome()){
+                echo
+                "<script>
+                alert('Você não é o possuidor deste documento, portanto não pode ser excluído.');
+                window.history.back();
+                </script>";
             }
+
+            else if($documentoController->excluirDocumento($_POST["txtnProtocolo"])){
+                include_once "../View/documentoExcluido.php";
+            } 
             break;;
         
         //Cadastro realizado
@@ -389,5 +417,55 @@
             header("Location: ../index.php");
             exit;
             break;
+
+        case isset($_POST["btnAlterarDoc"]):
+            require_once "../Controller/DocumentoController.php";
+            $dc = new DocumentoController();
+
+            if($_POST['txtStatus'] == 'Pendente'){
+                echo
+                "<script>
+                alert('O documento está pendente, portanto não pode ser alterado.');
+                window.history.back();
+                </script>";
+            } elseif($_POST['txtStatus'] == 'Excluído'){
+                echo
+                "<script>
+                alert('O documento foi excluído, portanto não pode ser alterado.');
+                window.history.back();
+                </script>";
+            }else if($_POST["txtPossuidor"] !== unserialize($_SESSION['Usuario'])->getNome()){
+                echo
+                "<script>
+                alert('Você não é o possuidor deste documento, portanto não pode ser alterado.');
+                window.history.back();
+                </script>";
+            }
+            else if($dc->alteraTituloDocumento($_POST["txtTitulo"], $_POST["txtnProtocolo"])){
+                include_once "../View/alteracaoRealizada.php";
+            }
+            break;
+        
+
+
+        case isset($_POST["btnDesativarUsuario"]):
+            require_once "../Model/Usuario.php";
+            $u = new Usuario();
+            if(unserialize($_SESSION['Usuario'])->getCPF() === $_POST["cpfDes"]){
+                echo
+                "<script>
+                alert('Você não pode se auto excluir do sistema.');
+                window.history.back();
+                </script>";
+            }
+            else if($u->excluiUsuario($_POST["cpfDes"])){
+                echo
+                "<script>
+                    alert('Usuário excluído com sucesso!');
+                    window.history.back();
+                </script>";
+            }
+        break;
+            
     }
 ?>
