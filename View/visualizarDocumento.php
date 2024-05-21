@@ -66,10 +66,7 @@
             <div class="col-3 my-3">
                 <label for="txtTipo" class="form-label">Tipo Documento</label>
                 <select class="form-select" id="txtTipo" name="txtTipo">
-                    <option value="Requerimento">Requerimento</option>
-                    <option value="Pedido de Compra">Pedido de Compra</option>
-                    <option value="Ata">Ata</option>
-                    <option value="Relatório">Relatório</option>
+                    <option value="<?php echo $_GET['tipo']?>"><?php echo $_GET['tipo']?></option>
                 </select>
             </div>
             <div class="col-8 my-3">
@@ -81,7 +78,7 @@
                 <input class="form-control" id="txtSetor" name="txtSetor" readonly value="<?php echo $_GET['setor_destinatario']?>">
             </div>
             <input type="hidden" class="form-control" id="txtStatus" name="txtStatus" value="<?php echo $_GET['estado']?>">
-            <button name="btnExcluirDoc" class="col-3 btn btn-danger my-3 mx-2">Exluir</button>
+            <button name="btnExcluirDoc" class="col-3 btn btn-danger my-3 mx-2">Excluir</button>
             <button name="btnAlterarDoc" class="col-3 btn btn-secondary my-3 mx-2">Alterar</button>
             <button name="btnTelaEnvio" class="col-3 btn btn-dark my-3 mx-2">Enviar</button>
         </form>
