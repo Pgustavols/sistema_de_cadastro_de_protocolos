@@ -13,6 +13,19 @@
         .font-padrao {
             font-family: Roboto;
         }
+        .notification {
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 2px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .button-container {
+            position: relative;
+            display: inline-block;
+        }
 
     </style>
 </head>
@@ -57,7 +70,7 @@
                 </span>    
             </form>
         </div>
-        <div class="col-1">
+        <div class="col-1 button-container">
             <button class="btn btn-light shadow-sm border h-100 w-100" name="btnDocumentoPendente"
             id="btnDocumentoPendente" data-bs-toggle="modal" data-bs-target="#telaDocumentoPendente">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
@@ -65,6 +78,7 @@
                 <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
             </svg>
             </button>
+            <span id="notification" class="position-absolute top-0 start-80 translate-middle badge border border-light rounded-circle bg-danger p-2" style="display:none;"></span>
         </div>
         <div class="col-2">
             <button class="col-2 btn btn-dark shadow-sm border h-100 w-100" name="btnNovoDocumento"
@@ -84,7 +98,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body table-responsive" style="max-height: 400px;">
-                    <table class="table table-striped table-hover rounded-3 shadow">
+                    <table class="table table-striped table-hover rounded-3 shadow" id="tabelaDocPendentes">
                         <thead class="table-dark">
                         <th class="text-center">Nº Protocolo</th>
                         <th class="text-center">Título</th>
@@ -276,6 +290,22 @@
         // Trigger change event on page load to set the initial value
         destinatarioSelect.dispatchEvent(new Event('change'));
     });
+
+    function checkTableAndShowNotification() {
+            var table = document.getElementById('tabelaDocPendentes');
+            var tbody = table.getElementsByTagName('tbody')[0];
+            var rows = tbody.getElementsByTagName('tr');
+            var notification = document.getElementById('notification');
+
+            if (rows.length > 0 && rows[0].getElementsByTagName('td').length > 0) {
+                notification.style.display = 'inline';
+            } else {
+                notification.style.display = 'none';
+            }
+        }
+
+        // Chamar a função para verificar a tabela ao carregar a página
+        checkTableAndShowNotification();
 </script>
 </body>
 </html>

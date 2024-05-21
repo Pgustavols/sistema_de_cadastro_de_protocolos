@@ -43,6 +43,28 @@
                 }
             break;
 
+        //Recuperar senha
+        case isset($_POST["btnRecSenha"]):
+            require_once "../Controller/UsuarioController.php";
+            if($_POST["txtCpf"] == ''){
+                echo
+                "<script>
+                alert('Por favor, preencha o campo CPF.');
+                window.history.back();
+                </script>";
+            } else {
+                $uController = new UsuarioController();
+                
+                if ($uController->esquecerSenha(
+                    $_POST["txtCpf"]
+                )){
+                    include_once "../View/solicitacaoEnviada.php";
+                } else {
+                    include_once "../View/solicitacaoNaoEnviada.php";
+                }
+            }
+            break;
+
         //Cadastrar usuario
         case isset($_POST["btnCadastrarUser"]):
             require_once "../Controller/UsuarioController.php";
@@ -90,7 +112,7 @@
         case isset($_POST["btnAlterarUser"]):
             require_once "../Controller/UsuarioController.php";
             $uController = new UsuarioController();
-
+            
             if ($uController->atualizar(
                 $_POST["txtNome"],
                 $_POST["txtEmail"],
@@ -103,6 +125,26 @@
             } else {
                 include_once "../View/alteracaoNaoRealizada.php";
             }
+            break;
+
+            //Desativar usuario
+            case isset($_POST["btnDesativarUsuario"]):
+                require_once "../Model/Usuario.php";
+                $u = new Usuario();
+                if(unserialize($_SESSION['Usuario'])->getCPF() === $_POST["cpfDes"]){
+                    echo
+                    "<script>
+                    alert('Você não pode se auto excluir do sistema.');
+                    window.history.back();
+                    </script>";
+                }
+                else if($u->excluiUsuario($_POST["cpfDes"])){
+                    echo
+                    "<script>
+                        alert('Usuário excluído com sucesso!');
+                        window.history.back();
+                    </script>";
+                }
             break;
 
         //Confirmar documento
@@ -279,6 +321,36 @@
             }
             break;;
         
+        //Alterar documento
+        case isset($_POST["btnAlterarDoc"]):
+            require_once "../Controller/DocumentoController.php";
+            $dc = new DocumentoController();
+
+            if($_POST['txtStatus'] == 'Pendente'){
+                echo
+                "<script>
+                alert('O documento está pendente, portanto não pode ser alterado.');
+                window.history.back();
+                </script>";
+            } elseif($_POST['txtStatus'] == 'Excluído'){
+                echo
+                "<script>
+                alert('O documento foi excluído, portanto não pode ser alterado.');
+                window.history.back();
+                </script>";
+            }else if($_POST["txtPossuidor"] !== ($_SESSION['nome'])){
+                echo
+                "<script>
+                alert('Você não é o possuidor deste documento, portanto não pode ser alterado.');
+                window.history.back();
+                </script>";
+            }
+            else if($dc->alteraTituloDocumento($_POST["txtTitulo"], $_POST["txtnProtocolo"])){
+                include_once "../View/alteracaoRealizada.php";
+            }
+            break;
+            
+    
         //Excluir documento
         case isset($_POST["btnExcluirDoc"]):
             require_once "../Model/Usuario.php";
@@ -399,6 +471,14 @@
                 include_once "../View/inicioUsuario.php";
             }
             break;
+
+        //Solicitação senha
+        case isset($_POST["btnSolicitacao"]):
+            session_destroy();
+
+            header("Location: ../index.php");
+            exit;
+            break;
         
         //Cancelar
         case isset($_POST["btnCancelar"]):
@@ -406,6 +486,11 @@
                 include_once "../View/inicioGestor.php";
             } elseif ($_SESSION['nivel'] == 'Comum'){
                 include_once "../View/inicioUsuario.php";
+            } else {
+            session_destroy();
+
+            header("Location: ../index.php");
+            exit;
             }
             break;
 
@@ -416,56 +501,6 @@
 
             header("Location: ../index.php");
             exit;
-            break;
-
-        case isset($_POST["btnAlterarDoc"]):
-            require_once "../Controller/DocumentoController.php";
-            $dc = new DocumentoController();
-
-            if($_POST['txtStatus'] == 'Pendente'){
-                echo
-                "<script>
-                alert('O documento está pendente, portanto não pode ser alterado.');
-                window.history.back();
-                </script>";
-            } elseif($_POST['txtStatus'] == 'Excluído'){
-                echo
-                "<script>
-                alert('O documento foi excluído, portanto não pode ser alterado.');
-                window.history.back();
-                </script>";
-            }else if($_POST["txtPossuidor"] !== unserialize($_SESSION['Usuario'])->getNome()){
-                echo
-                "<script>
-                alert('Você não é o possuidor deste documento, portanto não pode ser alterado.');
-                window.history.back();
-                </script>";
-            }
-            else if($dc->alteraTituloDocumento($_POST["txtTitulo"], $_POST["txtnProtocolo"])){
-                include_once "../View/alteracaoRealizada.php";
-            }
-            break;
-        
-
-
-        case isset($_POST["btnDesativarUsuario"]):
-            require_once "../Model/Usuario.php";
-            $u = new Usuario();
-            if(unserialize($_SESSION['Usuario'])->getCPF() === $_POST["cpfDes"]){
-                echo
-                "<script>
-                alert('Você não pode se auto excluir do sistema.');
-                window.history.back();
-                </script>";
-            }
-            else if($u->excluiUsuario($_POST["cpfDes"])){
-                echo
-                "<script>
-                    alert('Usuário excluído com sucesso!');
-                    window.history.back();
-                </script>";
-            }
-        break;
-            
+            break;   
     }
 ?>

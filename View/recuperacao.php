@@ -21,13 +21,13 @@
 <main class="container-fluid p-4 font-padrao">
     <div class="container m-auto bg-white rounded shadow p-4 border" style="width:30%; min-width:350px;">
         <p class="text-center fw-semibold my-4">O seu gestor irá receber a solicitação para alteração da senha.</p>
-        <form action="#">
+        <form action="../Controller/Navegacao.php" method="post">
             <div class="form-floating my-3">
-                <input type="text" class="form-control" id="login" name="login" placeholder="Login">
-                <label for="login">Login</label>
+                <input type="text" class="form-control" id="txtCpf" name="txtCpf" placeholder="txtCpf">
+                <label for="txtCpf">CPF</label>
             </div>
-                <button class="btn btn-dark col-12 my-2">Enviar Solicitação</button>
-                <button class="btn btn-danger col-12 my-2">Cancelar</button>
+                <button name="btnRecSenha" class="btn btn-dark col-12 my-2">Enviar Solicitação</button>
+                <button name="btnCancelar" class="btn btn-danger col-12 my-2">Cancelar</button>
         </form>
     </div>
 </main>

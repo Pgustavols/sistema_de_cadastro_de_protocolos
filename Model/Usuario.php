@@ -77,6 +77,36 @@
                 }
             }
 
+            public function esquecerSenha() {
+                require_once "ConexaoBD.php";
+                
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+            
+                $sql = "UPDATE usuario SET senha = '' WHERE cpf = ?";
+                $stmt = $conn->prepare($sql);
+                if ($stmt === false) {
+                    die("Error preparing statement: " . $conn->error);
+                }
+                
+                // Bind the parameters to the statement
+                $stmt->bind_param("s", $this->cpf);
+            
+                // Execute the statement
+                if ($stmt->execute() === TRUE) {
+                    $stmt->close();
+                    $conn->close();
+                    return TRUE;
+                } else {
+                    $stmt->close();
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+
             public function atualizarUsuario() {
                 require_once "ConexaoBD.php";
                 
@@ -163,7 +193,7 @@
                 }
             
                 // Certifique-se de usar uma consulta preparada para evitar injeção de SQL
-                $stmt = $conn->prepare("SELECT cpf, nome FROM usuario WHERE cpf <> ?");
+                $stmt = $conn->prepare("SELECT cpf, nome FROM usuario WHERE cpf <> ? AND setor <>'Desativado'");
                 $stmt->bind_param("s", $cpf_logado);
                 $stmt->execute();
                 $result = $stmt->get_result();

@@ -7,7 +7,7 @@ create table usuario(
   setor varchar(50) not null,
   email varchar(255) unique not null,
   senha varchar(50) not null,
-  nivel enum("Comum", "Gerente") not null
+  nivel enum("Comum", "Gerente" , "Desativado") not null
 );
 
 create table documento(
@@ -15,7 +15,7 @@ create table documento(
 	cpf_possuidor varchar(11) not null,
     cpf_destinatario varchar(11) not null,
     data_de_cadastro date not null,
-	tipo enum("Requirimento", "Pedido de Compra", "Ata", "Relatório") not null,
+	tipo enum("Requerimento", "Pedido de Compra", "Ata", "Relatório") not null,
     titulo varchar(255) not null,
     estado varchar(50) not null default "Pendente",
     foreign key(cpf_possuidor) references usuario(cpf)
@@ -77,15 +77,71 @@ end ;
    	
  // delimiter ;
 
- DELIMITER //
+delimiter //
+	create trigger transfere_documentos_para_gestor after update on usuario for each row 
+    begin
+		if(new.setor = "Desativado" and new.nivel = "Desativado") then
+        
+			if(select count(*) from documento where cpf_possuidor = new.cpf or cpf_destinatario = new.cpf) > 0 then
+				update documento set cpf_destinatario = (select cpf from usuario where nivel = "Gerente" limit 1),
+				estado = "Pendente" where cpf_possuidor = new.cpf or cpf_destinatario = new.cpf;
+            end if ;
+		end if;
+    end ;
+// delimiter ;
 
-create procedure inserirUsuario (in cpf varchar(11), in nome varchar(255), in setor varchar(50), 
-in email varchar(255), in senha varchar(50), in nivel enum("Comum", "Gerente"))
+USE `sistema_de_protocolo`;
+CREATE  OR REPLACE VIEW view_documentos_detalhados AS
+SELECT 
+    d.nProtocolo,
+    d.cpf_possuidor,
+    p.nome AS nome_possuidor,
+    d.cpf_destinatario,
+    u.nome AS nome_destinatario,
+    u.setor AS setor_destinatario,
+    d.data_de_cadastro,
+    d.tipo,
+    d.titulo,
+    d.estado
+FROM 
+    documento d
+INNER JOIN 
+    usuario p ON d.cpf_possuidor = p.cpf
+INNER JOIN
+    usuario u ON d.cpf_destinatario = u.cpf;
 
-begin
-	insert into usuario(cpf, nome, setor, email, senha, nivel) values(cpf, nome, setor, email, senha, nivel);
-end
+USE `sistema_de_protocolo`;
+CREATE  OR REPLACE VIEW `view_movimentacao_detalhada` AS
+SELECT
+	m.ID,
+    m.nProtocolo,
+    t.titulo AS titulo,
+    m.estado,
+    m.cpf_destinatario,
+    d.nome AS nome_destinatario,
+    m.data_da_acao,
+    m.cpf_remetente,
+    r.nome AS nome_remetente
+FROM movimentacao m
+INNER JOIN 
+	usuario d ON m.cpf_destinatario = d.cpf
+INNER JOIN 
+	usuario r ON m.cpf_remetente = r.cpf
+INNER JOIN
+	documento t ON m.nProtocolo = t.nProtocolo;
 
 
-// DELIMITER ;
-
+INSERT INTO usuario(
+  cpf,
+  nome,
+  setor,
+  email,
+  senha,
+  nivel)
+VALUES(
+  '11111111111',
+  'Gestor',
+  'Geral',
+  'gestor@email.com',
+  '1234',
+  'Gerente');

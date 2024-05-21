@@ -19,6 +19,15 @@
         return $r;
         }
 
+        public function esquecerSenha($cpf) {
+            require_once '../Model/Usuario.php';
+            $usuario = new Usuario();
+            $usuario->setCPF($cpf);
+            $r = $usuario->esquecerSenha();
+            $_SESSION['Usuario'] = serialize($usuario);
+            return $r;
+        }
+
         public function atualizar($nome, $email, $setor, $senha, $cpf) {
             require_once '../Model/Usuario.php';
             $usuario = new Usuario();
@@ -31,6 +40,7 @@
             $_SESSION['Usuario'] = serialize($usuario);
             return $r;
         }
+
         public function login($cpf, $senha){
             require_once '../Model/Usuario.php';
             $usuario = new Usuario();

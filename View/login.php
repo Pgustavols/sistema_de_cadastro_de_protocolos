@@ -33,7 +33,7 @@
                     <label for="txtSenha">Senha</label>
                 </div>
                 <div class="col-12 my-2 text-end">
-                    <a href="recuperacao.php" class="text-dark">Esqueci minha senha</a>
+                    <a href="View/recuperacao.php" class="text-dark">Esqueci minha senha</a>
                 </div>
                 <button name="btnLogin" class="col-12 btn btn-dark my-2">Entrar</button>
             </form>
