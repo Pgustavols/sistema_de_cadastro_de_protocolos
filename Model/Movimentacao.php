@@ -66,7 +66,21 @@
                 die("Connection failed: ".$conn->connect_error);
             }
 
-            $sql = "SELECT * FROM view_movimentacao_detalhada WHERE nProtocolo = $nProtocolo";
+            $sql = "SELECT a.id, c.titulo, a.nProtocolo, a.estado, b.nome AS nome_destinatario, a.data_da_acao, a.nome AS nome_remetente 
+            FROM (
+                SELECT id, nProtocolo, estado, cpf_destinatario, data_da_acao, nome 
+                FROM movimentacao 
+                INNER JOIN usuario ON cpf = cpf_remetente
+            ) a 
+            INNER JOIN (
+                SELECT id, nome 
+                FROM movimentacao 
+                LEFT JOIN usuario ON cpf = cpf_destinatario
+            ) b ON a.id = b.id
+            INNER JOIN documento c ON c.nProtocolo = a.nProtocolo
+            WHERE a.nProtocolo = '$nProtocolo' 
+            ORDER BY a.id;";
+
             $re = $conn->query($sql);
                 $conn->close();
                 return $re;
