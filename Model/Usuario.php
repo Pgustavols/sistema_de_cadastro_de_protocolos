@@ -145,7 +145,7 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
 
-                $sql = "SELECT * FROM usuario";
+                $sql = "SELECT * FROM usuario WHERE setor <> 'Desativado';";
 
                 $re = $conn->query($sql);
                 $conn->close();
@@ -233,6 +233,28 @@
                     return false;
                 }
             }
+
+
+            public function excluiUsuario($cpf){
+                require_once "ConexaoBD.php";
+
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+                if($conn->connect_error){
+                    die("Connection failed: ".$conn->connect_error);
+                }
     
+                $sql = "UPDATE usuario SET setor = 'Desativado', nivel = 'Desativado' 
+                WHERE cpf = '$cpf';";
+               
+                if($conn->query($sql) === TRUE){
+                    $conn->close();
+                    return TRUE;
+                }else{
+                    $conn->close();
+                    return FALSE;
+                }
+            }
+            
     }
 ?>
