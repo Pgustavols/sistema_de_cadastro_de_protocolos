@@ -68,20 +68,29 @@
         //Cadastrar usuario
         case isset($_POST["btnCadastrarUser"]):
             require_once "../Controller/UsuarioController.php";
-            $uController = new UsuarioController();
-
-            if ($uController->inserir(
-                $_POST["txtCPF"],
-                $_POST["txtNome"],
-                $_POST["txtSetor"],
-                $_POST["txtEmail"],
-                $_POST["txtSenha"],
-                $_POST["txtNivel"],
-            )){
-                include_once "../View/cadastroRealizado.php";
-            } else {
+            
+            if(empty($_POST["txtCPF"]) || empty($_POST["txtNome"]) || empty($_POST["txtSetor"]) || empty($_POST["txtEmail"]) || empty($_POST["txtSenha"]) || empty($_POST["txtNivel"])){
+                echo
+                    "<script>
+                    alert('Por favor, preencha todos os campos.');
+                    </script>";
                 include_once "../View/cadastroNaoRealizado.php";
+               } else {   $uController = new UsuarioController();
+
+                if ($uController->inserir(
+                    $_POST["txtCPF"],
+                    $_POST["txtNome"],
+                    $_POST["txtSetor"],
+                    $_POST["txtEmail"],
+                    $_POST["txtSenha"],
+                    $_POST["txtNivel"],
+                )){
+                    include_once "../View/cadastroRealizado.php";
+                } else {
+                    include_once "../View/cadastroNaoRealizado.php";
+                }
             }
+            exit;
             break;
 
         //Tela de alteraração de usuario
@@ -131,19 +140,17 @@
             case isset($_POST["btnDesativarUsuario"]):
                 require_once "../Model/Usuario.php";
                 $u = new Usuario();
-                if(unserialize($_SESSION['Usuario'])->getCPF() === $_POST["cpfDes"]){
+                if($_SESSION['cpf'] === $_POST["cpfDes"]){
                     echo
                     "<script>
-                    alert('Você não pode se auto excluir do sistema.');
-                    window.history.back();
+                    alert('Você não pode se auto excluir.');
                     </script>";
+                    include_once "../View/usuarioNaoExcluido.php";
                 }
                 else if($u->excluiUsuario($_POST["cpfDes"])){
-                    echo
-                    "<script>
-                        alert('Usuário excluído com sucesso!');
-                        window.history.back();
-                    </script>";
+                    include_once "../View/usuarioExcluido.php";
+                } else{
+                    include_once "../View/usuarioNaoExcluido.php";
                 }
             break;
 
@@ -302,7 +309,7 @@
             require_once "../Model/Usuario.php";
             require_once "../Controller/DocumentoController.php";
             $documentoController = new DocumentoController();
-            if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
+            if($documentoController->cadastrarDocumento($_SESSION['cpf'], $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
                 include_once "../View/cadastroRealizado.php";
             } else {
                 include_once "../View/cadastroNaoRealizado.php";
@@ -314,7 +321,7 @@
             require_once "../Model/Usuario.php";
             require_once "../Controller/DocumentoController.php";
             $documentoController = new DocumentoController();
-            if($documentoController->cadastrarDocumento(unserialize($_SESSION['Usuario'])->getCPF(), $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
+            if($documentoController->cadastrarDocumento($_SESSION['cpf'], $_POST["txtDestinatario"], $_POST["txtTipo"], $_POST["txtTitulo"])){
                 include_once "../View/cadastroRealizado.php";
             } else {
                 include_once "../View/cadastroNaoRealizado.php";
