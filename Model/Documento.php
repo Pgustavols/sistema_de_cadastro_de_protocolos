@@ -264,20 +264,27 @@
                     die("Connection failed: ".$conn->connect_error);
                 }
 
-                $sql = "SELECT d.nProtocolo, d.titulo, u.nome, m.data_da_acao 
-                        FROM documento d 
-                        INNER JOIN usuario u ON u.cpf = d.cpf_possuidor
-                        INNER JOIN (
-                            SELECT nProtocolo, estado, cpf_remetente, cpf_destinatario, MAX(data_da_acao) AS data_da_acao 
-                            FROM movimentacao
-                            GROUP BY nProtocolo, estado, cpf_remetente, cpf_destinatario 
-                            HAVING cpf_destinatario = '$cpf_destinatario'
-                        ) m ON m.nProtocolo = d.nProtocolo AND m.cpf_remetente = u.cpf 
-                        WHERE d.cpf_destinatario = '$cpf_destinatario';";
+                $sql = "SELECT a.nProtocolo, a.titulo, b.nome, c.data_da_acao 
+                FROM documento a 
+                INNER JOIN (
+                    SELECT nProtocolo, nome 
+                    FROM documento 
+                    INNER JOIN usuario ON cpf = cpf_possuidor
+                ) b ON a.nProtocolo = b.nProtocolo
+                INNER JOIN (
+                    SELECT nProtocolo, MAX(data_da_acao) AS data_da_acao 
+                    FROM movimentacao 
+                    GROUP BY nProtocolo
+                ) c ON c.nProtocolo = a.nProtocolo 
+                WHERE a.cpf_destinatario = '$cpf_destinatario' 
+                AND a.cpf_possuidor <> '$cpf_destinatario';
+            ";
+
                 $re = $conn->query($sql);
                 $conn->close();
                 return $re;
             }
+
 
             public function visualizarDocumento($nProtocolo){
                 require_once "ConexaoBD.php";
