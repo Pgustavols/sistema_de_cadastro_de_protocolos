@@ -45,7 +45,7 @@
 
         require_once '../Model/Usuario.php';
 
-        $cpf_logado = unserialize($_SESSION['Usuario'])->getCPF(); // O CPF do usuário logado deve ser definido aqui
+        $cpf_logado = $_SESSION['cpf']; // O CPF do usuário logado deve ser definido aqui
         $usuario = new Usuario();
         $destinatarios = $usuario->listaDestinatarios($cpf_logado);
 
